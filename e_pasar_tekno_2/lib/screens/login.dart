@@ -1,3 +1,5 @@
+import 'package:e_pasar_tekno_2/screens/home.dart';
+import 'package:e_pasar_tekno_2/screens/register.dart';
 import 'package:flutter/material.dart';
 
 import '../custom_widgets/main_button.dart';
@@ -17,10 +19,10 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: appBarKu(),
       body: Container(
-        margin: const EdgeInsets.only(top: 50, bottom: 25, left: 30, right: 30),
+        margin: const EdgeInsets.only(top: 0, bottom: 0, left: 30, right: 30),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
               "Selamat Datang!",
@@ -56,14 +58,33 @@ class _LoginState extends State<Login> {
                       basicTextField("Password", passController, true),
                       const SizedBox(height: 25),
                       MainButton(
-                          btnText: "Masuk", onTap: () => debugPrint('temp')),
+                          btnText: "Masuk",
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()));
+                          }),
+                      const Text(
+                          "Sementara button diklik bisa langsung masuk Home Screen."),
                     ],
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 25),
-            const Text("Belum punya akun? Daftar disini"),
+            const Text("Belum punya akun?"),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Register()));
+              },
+              child: const Text("Daftar disini",
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Color.fromRGBO(0, 0, 255, 1),
+                  )),
+            ),
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:e_pasar_tekno_2/screens/home.dart';
+import 'package:e_pasar_tekno_2/screens/login.dart';
 import 'package:flutter/material.dart';
 
 import '../custom_widgets/main_button.dart';
@@ -16,7 +18,6 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: appBarKu(),
       body: Container(
         margin: const EdgeInsets.only(top: 0, bottom: 0, left: 30, right: 30),
         child: Column(
@@ -58,14 +59,31 @@ class _RegisterState extends State<Register> {
                       basicTextField("Password", tempController, true),
                       const SizedBox(height: 25),
                       MainButton(
-                          btnText: "Daftar", onTap: () => debugPrint('temp')),
+                          btnText: "Daftar",
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Home()));
+                          }),
                     ],
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 25),
-            const Text("Sudah punya akun? Masuk disini"),
+            const Text("Sudah punya akun?"),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => const Login()));
+              },
+              child: const Text("Masuk disini",
+                  style: TextStyle(
+                    decoration: TextDecoration.underline,
+                    color: Color.fromRGBO(0, 0, 255, 1),
+                  )),
+            ),
           ],
         ),
       ),
