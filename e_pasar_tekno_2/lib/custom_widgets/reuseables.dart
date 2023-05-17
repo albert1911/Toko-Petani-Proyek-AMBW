@@ -78,7 +78,7 @@ Container bottomBar(BuildContext context, String currentPage) {
           enableFeedback: false,
           onPressed: () {
             if (!isHomePage) {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Home()),
               );
@@ -94,7 +94,7 @@ Container bottomBar(BuildContext context, String currentPage) {
           enableFeedback: false,
           onPressed: () {
             if (!isCartPage) {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Cart()),
               );
@@ -110,7 +110,7 @@ Container bottomBar(BuildContext context, String currentPage) {
           enableFeedback: false,
           onPressed: () {
             if (!isAccountPage) {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const Account()),
               );

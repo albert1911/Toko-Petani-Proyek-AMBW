@@ -60,7 +60,7 @@ class _LoginState extends State<Login> {
                       MainButton(
                           btnText: "Masuk",
                           onTap: () {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => const Home()));
@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
                 const Text("Belum punya akun?"),
                 GestureDetector(
                   onTap: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const Register()));

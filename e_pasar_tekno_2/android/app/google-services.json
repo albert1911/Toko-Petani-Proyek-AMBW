@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "983092117019",
+    "project_id": "e-pasar-tekno-2",
+    "storage_bucket": "e-pasar-tekno-2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:983092117019:android:fa9a7c91216718737a82be",
+        "android_client_info": {
+          "package_name": "com.example.e_pasar_tekno_2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "983092117019-5ri32c57hqns9juqq24otvdj2n14ic11.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.e_pasar_tekno_2",
+            "certificate_hash": "505d2dce7c878075d2f7c19977571214f3d58be3"
+          }
+        },
+        {
+          "client_id": "983092117019-k92u52eoqhmr59l2dhmrt1l2lvnnuebd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKGXowTssRzo-GlvDfp1u9npEgd-GX8Uo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "983092117019-k92u52eoqhmr59l2dhmrt1l2lvnnuebd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

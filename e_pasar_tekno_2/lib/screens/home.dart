@@ -44,14 +44,14 @@ List<Card> _buildGridCards(BuildContext context) {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          AspectRatio(
-            aspectRatio: 18 / 11,
-            child: Image.asset(
-              product.assetName,
-              package: product.assetPackage,
-              fit: BoxFit.fitWidth,
-            ),
-          ),
+          // AspectRatio(
+          //   aspectRatio: 18 / 11,
+          //   child: Image.asset(
+          //     product.assetName,
+          //     package: product.assetPackage,
+          //     fit: BoxFit.fitWidth,
+          //   ),
+          // ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
