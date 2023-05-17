@@ -1,4 +1,4 @@
-import 'package:e_pasar_tekno_2/screens/home.dart';
+// import 'package:e_pasar_tekno_2/screens/home.dart';
 import 'package:e_pasar_tekno_2/screens/login.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +18,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // This is the theme of your application.
         primarySwatch: Colors.green,
-
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hoverColor: Colors.transparent,
       ),
       home: const Login(),
     );

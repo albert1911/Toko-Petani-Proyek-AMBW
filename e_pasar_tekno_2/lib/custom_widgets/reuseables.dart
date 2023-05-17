@@ -5,18 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../screens/home.dart';
 
-TextField basicTextField(
-    String text, TextEditingController controller, bool isPassword) {
-  return TextField(
-    controller: controller,
-    decoration: InputDecoration(
-      labelText: text,
-      filled: true,
-    ),
-    obscureText: isPassword,
-  );
-}
-
 AppBar topBar() {
   TextStyle appTitle = GoogleFonts.inriaSans(
     fontSize: 32,
@@ -90,7 +78,7 @@ Container bottomBar(BuildContext context, String currentPage) {
           enableFeedback: false,
           onPressed: () {
             if (!isHomePage) {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const Home()),
               );
@@ -106,7 +94,7 @@ Container bottomBar(BuildContext context, String currentPage) {
           enableFeedback: false,
           onPressed: () {
             if (!isCartPage) {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const Cart()),
               );
@@ -122,7 +110,7 @@ Container bottomBar(BuildContext context, String currentPage) {
           enableFeedback: false,
           onPressed: () {
             if (!isAccountPage) {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const Account()),
               );
@@ -136,5 +124,17 @@ Container bottomBar(BuildContext context, String currentPage) {
         ),
       ],
     ),
+  );
+}
+
+TextField basicTextField(
+    String text, TextEditingController controller, bool isPassword) {
+  return TextField(
+    controller: controller,
+    decoration: InputDecoration(
+      labelText: text,
+      filled: true,
+    ),
+    obscureText: isPassword,
   );
 }

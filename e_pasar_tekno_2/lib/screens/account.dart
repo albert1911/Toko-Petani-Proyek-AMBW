@@ -17,7 +17,7 @@ class _AccountState extends State<Account> {
       body: Container(
           // DISINI TEMPAT MASUKIN KE SCREEN
           ),
-      bottomNavigationBar: bottomBar(context, "Home"),
+      bottomNavigationBar: bottomBar(context, "Account"),
     );
   }
 }

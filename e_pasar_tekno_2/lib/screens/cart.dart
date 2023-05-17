@@ -16,9 +16,10 @@ class _CartState extends State<Cart> {
     return Scaffold(
       appBar: topBar(),
       body: Container(
-          // DISINI TEMPAT MASUKIN KE SCREEN
-          ),
-      bottomNavigationBar: bottomBar(context, "Home"),
+        // DISINI TEMPAT MASUKIN KE SCREEN
+        child: const Text("cart.dart"),
+      ),
+      bottomNavigationBar: bottomBar(context, "Cart"),
     );
   }
 }

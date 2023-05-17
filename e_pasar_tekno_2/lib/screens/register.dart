@@ -72,17 +72,22 @@ class _RegisterState extends State<Register> {
               ),
             ),
             const SizedBox(height: 25),
-            const Text("Sudah punya akun?"),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Login()));
-              },
-              child: const Text("Masuk disini",
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Color.fromRGBO(0, 0, 255, 1),
-                  )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Sudah punya akun?"),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const Login()));
+                  },
+                  child: const Text(" Masuk disini",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Color.fromRGBO(0, 0, 255, 1),
+                      )),
+                ),
+              ],
             ),
           ],
         ),

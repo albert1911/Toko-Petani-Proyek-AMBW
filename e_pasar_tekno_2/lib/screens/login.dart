@@ -53,37 +53,42 @@ class _LoginState extends State<Login> {
                       top: 25, bottom: 25, left: 25, right: 25),
                   child: Column(
                     children: [
-                      basicTextField('Username', userController, false),
+                      basicTextField('Email', userController, false),
                       const SizedBox(height: 12.0),
                       basicTextField("Password", passController, true),
                       const SizedBox(height: 25),
                       MainButton(
                           btnText: "Masuk",
                           onTap: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => const Home()));
                           }),
-                      const Text(
-                          "Sementara button diklik bisa langsung masuk Home Screen."),
                     ],
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 25),
-            const Text("Belum punya akun?"),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Register()));
-              },
-              child: const Text("Daftar disini",
-                  style: TextStyle(
-                    decoration: TextDecoration.underline,
-                    color: Color.fromRGBO(0, 0, 255, 1),
-                  )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text("Belum punya akun?"),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Register()));
+                  },
+                  child: const Text(" Daftar disini",
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Color.fromRGBO(0, 0, 255, 1),
+                      )),
+                ),
+              ],
             ),
           ],
         ),
