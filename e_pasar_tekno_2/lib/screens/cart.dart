@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../custom_widgets/main_button.dart';
-import '../custom_widgets/reuseables.dart';
+import '../custom_widgets.dart';
 
 class Cart extends StatefulWidget {
   const Cart({super.key});

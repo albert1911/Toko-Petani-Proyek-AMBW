@@ -1,98 +1,80 @@
 import 'package:e_pasar_tekno_2/screens/home.dart';
 import 'package:e_pasar_tekno_2/screens/register.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../custom_widgets/main_button.dart';
-import '../custom_widgets/reuseables.dart';
+import '../custom_widgets.dart';
 
 class Login extends StatefulWidget {
-  const Login({super.key});
+  final bool? isError;
+  const Login({super.key, this.isError});
 
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController userController = TextEditingController();
-  TextEditingController passController = TextEditingController();
+  String errorMessage = '';
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.only(top: 0, bottom: 0, left: 30, right: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              "Selamat Datang!",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const Text("Masuk menggunakan Username & Password"),
-            const SizedBox(height: 25),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.25),
-                    spreadRadius: 1,
-                    blurRadius: 4,
-                    offset: const Offset(1, 1),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
-                ),
-                child: Container(
-                  margin: const EdgeInsets.only(
-                      top: 25, bottom: 25, left: 25, right: 25),
-                  child: Column(
-                    children: [
-                      basicTextField('Email', userController, false),
-                      const SizedBox(height: 12.0),
-                      basicTextField("Password", passController, true),
-                      const SizedBox(height: 25),
-                      MainButton(
-                          btnText: "Masuk",
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Home()));
-                          }),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 25),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Belum punya akun?"),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const Register()));
-                  },
-                  child: const Text(" Daftar disini",
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Color.fromRGBO(0, 0, 255, 1),
-                      )),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+    String title = "Selamat Datang!";
+    String subtitle = "Masuk menggunakan Username & Password";
+    bool? isError = widget.isError ?? true;
+
+    Widget content = Column(
+      children: [
+        basicTextField('Email', emailController, false),
+        const SizedBox(height: 12.0),
+        basicTextField("Password", passController, true),
+        const SizedBox(height: 25),
+        CustomButton(
+            btnText: "Masuk", onTap: () => signInWithEmailAndPassword()),
+      ],
     );
+
+    Widget subcontent = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("Belum punya akun?"),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const Register()));
+          },
+          child: const Text(" Daftar disini",
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+                color: Color.fromRGBO(0, 0, 255, 1),
+              )),
+        ),
+      ],
+    );
+
+    return CustomContainer(
+      title: title,
+      subtitle: subtitle,
+      content: content,
+      subcontent: subcontent,
+      message: errorMessage,
+      isError: isError,
+    );
+  }
+
+  Future<void> signInWithEmailAndPassword() async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: emailController.text, password: passController.text)
+          .then((value) => Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const Home())));
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        errorMessage = e.message!;
+      });
+    }
   }
 }

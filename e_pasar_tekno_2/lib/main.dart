@@ -1,11 +1,13 @@
 // import 'package:e_pasar_tekno_2/screens/home.dart';
 import 'package:e_pasar_tekno_2/screens/login.dart';
+// import 'package:e_pasar_tekno_2/screens/testing_crud.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 

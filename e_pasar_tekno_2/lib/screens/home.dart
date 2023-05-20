@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../custom_widgets/reuseables.dart';
+import '../custom_widgets.dart';
 import '../model/product.dart';
 import '../model/product_repository.dart';
 
