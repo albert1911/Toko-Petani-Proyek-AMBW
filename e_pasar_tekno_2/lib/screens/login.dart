@@ -25,6 +25,10 @@ class _LoginState extends State<Login> {
     String subtitle = "Masuk menggunakan Username & Password";
     bool? isError = widget.isError ?? true;
 
+    if (!isError) {
+      errorMessage = "Akan anda berhasil dibuat.";
+    }
+
     Widget content = Column(
       children: [
         basicTextField('Email', emailController, false),
@@ -73,7 +77,8 @@ class _LoginState extends State<Login> {
               context, MaterialPageRoute(builder: (context) => const Home())));
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message!;
+        // errorMessage = e.message!;
+        errorMessage = e.code;
       });
     }
   }

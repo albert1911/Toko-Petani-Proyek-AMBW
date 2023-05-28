@@ -33,7 +33,7 @@ dependencies:
   
   # NEW DEPENDENCIES
   google_fonts: ^4.0.4
-  intl: ^0.17.0
+  intl: ^0.18.1
   firebase_core: ^2.13.0
   firebase_auth: ^4.6.1
   cloud_firestore: ^4.7.1
