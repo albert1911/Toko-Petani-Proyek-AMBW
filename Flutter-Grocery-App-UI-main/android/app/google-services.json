@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "219630891459",
+    "project_id": "e-pasar-642b7",
+    "storage_bucket": "e-pasar-642b7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:219630891459:android:25f7c3f1da64c9e0808d76",
+        "android_client_info": {
+          "package_name": "com.example.e_pasar"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkeBhAaDmPa5h9w-w1N-ih484jQT1pwsY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

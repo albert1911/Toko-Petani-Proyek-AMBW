@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:grocery_app/screens/welcome_screen.dart';
-import 'package:grocery_app/styles/colors.dart';
+// import 'package:grocery_app/styles/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
+      backgroundColor: Color(0xFFFEFFB5),
       body: Center(
         child: splashScreenIcon(),
       ),
@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
 }
 
 Widget splashScreenIcon() {
-  String iconPath = "assets/icons/splash_screen_icon.svg";
+  String iconPath = "assets/icons/_app_icon.svg";
   return SvgPicture.asset(
     iconPath,
   );

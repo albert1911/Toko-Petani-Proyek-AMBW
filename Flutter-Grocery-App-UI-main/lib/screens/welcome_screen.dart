@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
-import 'package:grocery_app/styles/colors.dart';
+// import 'package:grocery_app/styles/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -11,7 +11,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: Color(0xFFFEFFB5),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 30),
           decoration: BoxDecoration(
@@ -48,11 +48,24 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   Widget icon() {
-    String iconPath = "assets/icons/app_icon.svg";
-    return SvgPicture.asset(
-      iconPath,
-      width: 48,
-      height: 56,
+    String iconPath = "assets/icons/_app_icon.svg";
+    return Container(
+      width: 96,
+      height: 96,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFFA8FF8D).withOpacity(0.8),
+            blurRadius: 50,
+            spreadRadius: 10,
+          ),
+        ],
+      ),
+      child: SvgPicture.asset(
+        iconPath,
+        width: 96,
+        height: 96,
+      ),
     );
   }
 
@@ -60,16 +73,18 @@ class WelcomeScreen extends StatelessWidget {
     return Column(
       children: [
         AppText(
-          text: "Welcome",
-          fontSize: 48,
+          text: "Selamat datang!",
+          fontSize: 34,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
+          color: Color(0xFF2A881E),
+          glowColor: Color(0xFFA8FF8D),
         ),
         AppText(
-          text: "to our store",
+          text: "E-PASAR",
           fontSize: 48,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
+          color: Color(0xFF2A881E),
+          glowColor: Color(0xFFA8FF8D),
         ),
       ],
     );
@@ -77,16 +92,17 @@ class WelcomeScreen extends StatelessWidget {
 
   Widget sloganText() {
     return AppText(
-      text: "Get your grecories as fast as in hour",
+      text: "Sadia sayur dan buah langsung dari pasar",
       fontSize: 16,
       fontWeight: FontWeight.w600,
-      color: Color(0xffFCFCFC).withOpacity(0.7),
+      color: Color(0xFF2A881E).withOpacity(0.7),
+      glowColor: Color(0xFFA8FF8D),
     );
   }
 
   Widget getButton(BuildContext context) {
     return AppButton(
-      label: "Get Started",
+      label: "Masuk",
       fontWeight: FontWeight.w600,
       padding: EdgeInsets.symmetric(vertical: 25),
       onPressed: () {

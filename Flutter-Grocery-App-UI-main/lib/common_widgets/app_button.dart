@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:grocery_app/styles/colors.dart';
+// import 'package:grocery_app/styles/colors.dart';
 
 class AppButton extends StatelessWidget {
   final String label;
@@ -33,10 +33,10 @@ class AppButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(roundness),
           ),
           elevation: 0,
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: Color(0xFFFEFFB5),
           textStyle: TextStyle(
-            color: Colors.white,
-            fontFamily: Theme.of(context).textTheme.bodyText1?.fontFamily,
+            color: Color(0xFF2A881E),
+            fontFamily: Theme.of(context).textTheme.bodyLarge?.fontFamily,
             fontWeight: fontWeight,
           ),
           padding: padding,
@@ -50,6 +50,7 @@ class AppButton extends StatelessWidget {
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  color: Color(0xFF2A881E),
                   fontSize: 18,
                   fontWeight: fontWeight,
                 ),
