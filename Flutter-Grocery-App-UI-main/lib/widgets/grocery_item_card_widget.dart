@@ -63,7 +63,7 @@ class GroceryItemCardWidget extends StatelessWidget {
             Row(
               children: [
                 AppText(
-                  text: "\$${item.price.toStringAsFixed(2)}",
+                  text: "\Rp. ${item.price.toStringAsFixed(3)}",
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),

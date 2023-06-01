@@ -1,15 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
+import 'package:grocery_app/screens/account/login_screen.dart';
 import 'package:grocery_app/styles/colors.dart';
+import 'package:provider/provider.dart';
+import 'package:recase/recase.dart';
 
+import '_user_provider.dart';
 import 'account_item.dart';
 
 class AccountScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final userEmail = userProvider.userEmail;
+    final userName = userProvider.userName;
+
     return SafeArea(
       child: Container(
         child: SingleChildScrollView(
@@ -22,12 +31,14 @@ class AccountScreen extends StatelessWidget {
                 leading:
                     SizedBox(width: 65, height: 65, child: getImageHeader()),
                 title: AppText(
-                  text: "Mohammed Hashim",
+                  text: ReCase(userName ?? 'Username').titleCase,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 subtitle: AppText(
-                  text: "github.com/mohammedhashim44",
+                  text: userProvider.userEmail != null
+                      ? userEmail.toString()
+                      : "Email",
                   color: Color(0xff7C7C7C),
                   fontWeight: FontWeight.normal,
                   fontSize: 16,
@@ -46,10 +57,10 @@ class AccountScreen extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              logoutButton(),
+              logoutButton(context, userEmail.toString(), userProvider),
               SizedBox(
                 height: 20,
-              )
+              ),
             ],
           ),
         ),
@@ -57,7 +68,8 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget logoutButton() {
+  Widget logoutButton(
+      BuildContext context, String userEmail, UserProvider userProvider) {
     return Container(
       width: double.maxFinite,
       margin: EdgeInsets.symmetric(horizontal: 25),
@@ -86,7 +98,7 @@ class AccountScreen extends StatelessWidget {
               ),
             ),
             Text(
-              "Log Out",
+              userProvider.userEmail != null ? "Keluar" : "Masuk",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 18,
@@ -96,7 +108,21 @@ class AccountScreen extends StatelessWidget {
             Container()
           ],
         ),
-        onPressed: () {},
+        onPressed: () async {
+          if (userProvider.userEmail != null) {
+            userProvider.setUserEmail(null);
+            userProvider.setUserName();
+
+            try {
+              await FirebaseAuth.instance.signOut();
+            } catch (e) {
+              print('Error signing out: $e');
+            }
+          } else {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Login()));
+          }
+        },
       ),
     );
   }

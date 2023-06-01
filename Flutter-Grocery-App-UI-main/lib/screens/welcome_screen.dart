@@ -74,17 +74,18 @@ class WelcomeScreen extends StatelessWidget {
       children: [
         AppText(
           text: "Selamat datang!",
-          fontSize: 34,
+          fontSize: 36,
           fontWeight: FontWeight.w600,
           color: Color(0xFF2A881E),
           glowColor: Color(0xFFA8FF8D),
         ),
         AppText(
-          text: "E-PASAR",
+          text: "E-PASAR: Buah & Sayur",
           fontSize: 48,
           fontWeight: FontWeight.w600,
           color: Color(0xFF2A881E),
           glowColor: Color(0xFFA8FF8D),
+          textAlign: TextAlign.center,
         ),
       ],
     );
