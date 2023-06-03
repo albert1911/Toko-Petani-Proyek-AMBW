@@ -7,7 +7,15 @@ import 'package:grocery_app/widgets/grocery_item_card_widget.dart';
 
 import 'filter_screen.dart';
 
-class CategoryItemsScreen extends StatelessWidget {
+class CategoryItemsScreen extends StatefulWidget {
+  final String? productType;
+  const CategoryItemsScreen({super.key, this.productType});
+
+  @override
+  State<CategoryItemsScreen> createState() => _CategoryItemsScreenState();
+}
+
+class _CategoryItemsScreenState extends State<CategoryItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +58,7 @@ class CategoryItemsScreen extends StatelessWidget {
             horizontal: 25,
           ),
           child: AppText(
-            text: "Beverages",
+            text: widget.productType.toString(),
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -59,24 +67,41 @@ class CategoryItemsScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: StaggeredGrid.count(
           crossAxisCount: 2,
-          // I only need two card horizontally
-          children: beverages.asMap().entries.map<Widget>((e) {
-            GroceryItem groceryItem = e.value;
-            return GestureDetector(
-              onTap: () {
-                onItemClicked(context, groceryItem);
-              },
-              child: Container(
-                padding: EdgeInsets.all(10),
-                child: GroceryItemCardWidget(
-                  item: groceryItem,
-                  heroSuffix: "explore_screen",
-                ),
-              ),
-            );
-          }).toList(),
+          children: widget.productType == "Sayur-mayur"
+              ? itemsSayur.asMap().entries.map<Widget>((e) {
+                  GroceryItem groceryItem = e.value;
+                  return GestureDetector(
+                    onTap: () {
+                      onItemClicked(context, groceryItem);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      child: GroceryItemCardWidget(
+                        item: groceryItem,
+                        heroSuffix: "explore_screen",
+                      ),
+                    ),
+                  );
+                }).toList()
+              : widget.productType == "Buah-buahan"
+                  ? itemsBuah.asMap().entries.map<Widget>((e) {
+                      GroceryItem groceryItem = e.value;
+                      return GestureDetector(
+                        onTap: () {
+                          onItemClicked(context, groceryItem);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: GroceryItemCardWidget(
+                            item: groceryItem,
+                            heroSuffix: "explore_screen",
+                          ),
+                        ),
+                      );
+                    }).toList()
+                  : <Widget>[],
           mainAxisSpacing: 3.0,
-          crossAxisSpacing: 0.0, // add some space
+          crossAxisSpacing: 0.0,
         ),
       ),
     );

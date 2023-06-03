@@ -69,6 +69,7 @@ class _LoginState extends State<Login> {
       subcontent: subcontent,
       message: errorMessage,
       isError: isError,
+      appBarTitle: "Silahkan Lakukan Login",
     );
   }
 

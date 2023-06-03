@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/widgets/grocery_item_card_widget.dart';
 import 'package:grocery_app/widgets/search_bar_widget.dart';
 
+import '../category_items_screen.dart';
 import 'grocery_featured_Item_widget.dart';
 import 'home_banner_widget.dart';
 
@@ -17,10 +18,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool shouldFetchData = false;
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      stream: FirebaseFirestore.instance.collection('products').snapshots(),
+      stream: shouldFetchData
+          ? FirebaseFirestore.instance.collection('products').snapshots()
+          : null, // Pass null to disable the stream
       builder: (BuildContext context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
@@ -32,14 +37,27 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         final List<DocumentSnapshot<Map<String, dynamic>>> documents =
-            snapshot.data!.docs;
-        final List<GroceryItem> items = documents.map((document) {
+            snapshot.data?.docs ?? [];
+
+        // Clear the existing lists
+        itemsSayur.clear();
+        itemsBuah.clear();
+
+        documents.forEach((document) {
           final Map<String, dynamic>? data = document.data();
+
           // Create a GroceryItem object using the fetched data
-          return GroceryItem(
+          final GroceryItem item = GroceryItem(
             name: data!['name'],
             price: double.parse(data['price'].toString()),
-            description: "",
+            description: data['quantity'] +
+                ", Total stok: " +
+                List<String>.from(data['stock']['stock-amount'])
+                    .map((string) => int.parse(string))
+                    .toList()
+                    .reduce((value, element) => value + element)
+                    .toString(),
+            quantity: data['quantity'],
             imagePath: "assets/images/barang_jualan/" + data['name'] + ".jpg",
             details: Stock(
               merchantIds: List<String>.from(data['stock']['id-merchant']),
@@ -47,7 +65,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             type: data['type'],
           );
-        }).toList();
+
+          if (data['type'] == 'sayur') {
+            itemsSayur.add(item);
+          } else if (data['type'] == 'buah') {
+            itemsBuah.add(item);
+          }
+        });
 
         return Scaffold(
           body: SafeArea(
@@ -56,6 +80,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Center(
                   child: Column(
                     children: [
+                      // Button untuk debugging
+                      // ElevatedButton(
+                      //   onPressed: () => showEditLocationDialog(context),
+                      //   child: Text("Open Edit Location"),
+                      // ),
                       SizedBox(
                         height: 15,
                       ),
@@ -87,17 +116,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 25,
                       ),
-                      padded(subTitle("Exclusive Order")),
-                      getHorizontalItemSlider(items),
+                      padded(subTitle("Buah-buahan", true)),
+                      getHorizontalItemSlider(exclusiveOffers),
                       SizedBox(
                         height: 15,
                       ),
-                      padded(subTitle("Best Selling")),
+                      padded(subTitle("Sayur-mayur", true)),
                       getHorizontalItemSlider(bestSelling),
                       SizedBox(
                         height: 15,
                       ),
-                      padded(subTitle("Groceries")),
+                      padded(subTitle("Daftar Katalog", false)),
                       SizedBox(
                         height: 15,
                       ),
@@ -110,16 +139,38 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               width: 20,
                             ),
-                            GroceryFeaturedCard(
-                              groceryFeaturedItems[0],
-                              color: Color(0xffF8A44C),
+                            GestureDetector(
+                              onTap: () => {
+                                Navigator.of(context)
+                                    .push(new MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return CategoryItemsScreen(
+                                        productType: "Sayur-mayur");
+                                  },
+                                )),
+                              },
+                              child: GroceryFeaturedCard(
+                                groceryFeaturedItems[0],
+                                color: Color(0xffF8A44C),
+                              ),
                             ),
                             SizedBox(
                               width: 20,
                             ),
-                            GroceryFeaturedCard(
-                              groceryFeaturedItems[1],
-                              color: AppColors.primaryColor,
+                            GestureDetector(
+                              onTap: () => {
+                                Navigator.of(context)
+                                    .push(new MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return CategoryItemsScreen(
+                                        productType: "Buah-buahan");
+                                  },
+                                )),
+                              },
+                              child: GroceryFeaturedCard(
+                                groceryFeaturedItems[1],
+                                color: AppColors.primaryColor,
+                              ),
                             ),
                             SizedBox(
                               width: 20,
@@ -127,10 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      getHorizontalItemSlider(groceries),
                       SizedBox(
                         height: 15,
                       ),
@@ -191,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget subTitle(String text) {
+  Widget subTitle(String text, bool showSeeAll) {
     return Row(
       children: [
         Text(
@@ -199,13 +246,14 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         Spacer(),
-        Text(
-          "See All",
-          style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryColor),
-        ),
+        if (showSeeAll)
+          Text(
+            "See All",
+            style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryColor),
+          ),
       ],
     );
   }

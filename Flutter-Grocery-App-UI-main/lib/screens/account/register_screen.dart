@@ -25,8 +25,8 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    String title = "Registrasi";
-    String subtitle = "Buat akun baru";
+    String title = "Buat Akun Baru";
+    String subtitle = "null";
 
     Widget content = Column(
       children: [
@@ -66,6 +66,7 @@ class _RegisterState extends State<Register> {
       content: content,
       subcontent: subcontent,
       isError: true,
+      appBarTitle: "Silahkan Lakukan Registrasi",
     );
   }
 
@@ -88,7 +89,8 @@ class _RegisterState extends State<Register> {
       });
     } on FirebaseAuthException catch (e) {
       setState(() {
-        errorMessage = e.message!;
+        // errorMessage = e.message!;
+        errorMessage = e.code;
       });
     }
   }

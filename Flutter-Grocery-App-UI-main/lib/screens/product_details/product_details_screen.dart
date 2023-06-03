@@ -4,6 +4,7 @@ import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/grocery_item.dart';
 import 'package:grocery_app/widgets/item_counter_widget.dart';
 
+import '_edit_data_dialog.dart';
 import 'favourite_toggle_icon_widget.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -17,7 +18,31 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  int amount = 1;
+  int amount = 1; // Default product's quantity
+  String? selectedLocation; // Default selected location
+  String? locationName;
+  String? currentQuantity;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedLocation = widget.groceryItem.details?.merchantIds[0].toString();
+    locationName = getLocationName(selectedLocation!);
+    currentQuantity = "-/1kg";
+  }
+
+  void updateSelectedLocation(String locationId) {
+    setState(() {
+      selectedLocation = locationId;
+      locationName = getLocationName(locationId);
+    });
+  }
+
+  void updateSelectedQuantity(String quantityAmount) {
+    setState(() {
+      currentQuantity = quantityAmount;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +83,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                         Spacer(),
                         Text(
-                          "Rp. ${getTotalPrice().toStringAsFixed(3)}",
+                          "Rp. ${calculateTotalPrice(currentQuantity).toStringAsFixed(3)}",
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -68,22 +93,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     Spacer(),
                     Divider(thickness: 1),
-                    getProductDataRowWidget("Toko",
-                        customWidget: detailsWidget("Pasar Mekar")),
+                    getProductDataRowWidget("Toko", true,
+                        customWidget: detailsWidget(locationName.toString())),
                     Divider(thickness: 1),
-                    getProductDataRowWidget("Kuantitas",
-                        customWidget: detailsWidget("1 kg")),
+                    getProductDataRowWidget("Kuantitas", false,
+                        customWidget:
+                            containsNumber(widget.groceryItem.quantity)
+                                ? detailsWidget(currentQuantity.toString())
+                                : detailsWidget(widget.groceryItem.quantity)),
                     Divider(thickness: 1),
-                    // getProductDataRowWidget("Nutritions",
-                    //     customWidget: nutritionWidget()),
-                    // Divider(thickness: 1),
                     getProductDataRowWidget(
                       "Review",
+                      false,
                       customWidget: ratingWidget(),
                     ),
                     Spacer(),
                     AppButton(
-                      label: "Add To Basket",
+                      label: "Masukkan ke Keranjang",
                     ),
                     Spacer(),
                   ],
@@ -129,27 +155,35 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  Widget getProductDataRowWidget(String label, {Widget? customWidget}) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: 20,
-        bottom: 20,
-      ),
-      child: Row(
-        children: [
-          AppText(text: label, fontWeight: FontWeight.w600, fontSize: 16),
-          Spacer(),
-          if (customWidget != null) ...[
-            customWidget,
-            SizedBox(
-              width: 20,
+  Widget getProductDataRowWidget(String label, bool isLocation,
+      {Widget? customWidget}) {
+    return GestureDetector(
+      onTap: () => isLocation == true
+          ? showEditLocationDialog(context, selectedLocation!)
+          : label != "Review" && containsNumber(widget.groceryItem.quantity)
+              ? showEditQuantityDialog(context, currentQuantity!)
+              : () => {},
+      child: Container(
+        margin: EdgeInsets.only(
+          top: 20,
+          bottom: 20,
+        ),
+        child: Row(
+          children: [
+            AppText(text: label, fontWeight: FontWeight.w600, fontSize: 16),
+            Spacer(),
+            if (customWidget != null) ...[
+              customWidget,
+              SizedBox(
+                width: 20,
+              )
+            ],
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 20,
             )
           ],
-          Icon(
-            Icons.arrow_forward_ios,
-            size: 20,
-          )
-        ],
+        ),
       ),
     );
   }
@@ -192,5 +226,52 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   double getTotalPrice() {
     return amount * widget.groceryItem.price;
+  }
+
+  void showEditLocationDialog(BuildContext context, String selectedLocation) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EditDataDialog(
+          currentLocation: widget.groceryItem.details!
+              .merchantIds[int.parse(selectedLocation) - 1],
+          locationOptions: widget.groceryItem.details!.merchantIds,
+          stockAmounts: widget.groceryItem.details!.stockAmounts,
+          onLocationSelected: updateSelectedLocation,
+          editType: "location",
+        );
+      },
+    );
+  }
+
+  void showEditQuantityDialog(BuildContext context, String currentQuantity) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return EditDataDialog(
+              currentLocation: currentQuantity,
+              locationOptions: ["-/250g", "-/500g", "-/1kg"],
+              stockAmounts: [],
+              onLocationSelected: updateSelectedQuantity,
+              editType: "quantity");
+        });
+  }
+
+  bool containsNumber(String? input) {
+    if (input == null) return false;
+    return RegExp(r'\d').hasMatch(input);
+  }
+
+  double calculateTotalPrice(productAmount) {
+    switch (productAmount) {
+      case "-/1kg":
+        return getTotalPrice();
+      case "-/500g":
+        return getTotalPrice() * 0.5;
+      case "-/250g":
+        return getTotalPrice() * 0.25;
+      default:
+        return getTotalPrice();
+    }
   }
 }

@@ -12,6 +12,7 @@ class CustomContainer extends StatelessWidget {
     required this.content,
     required this.subcontent,
     required this.isError,
+    required this.appBarTitle,
   });
 
   final String title;
@@ -20,6 +21,7 @@ class CustomContainer extends StatelessWidget {
   final Widget content;
   final Widget subcontent;
   final bool isError;
+  final String appBarTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -38,17 +40,21 @@ class CustomContainer extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
+        title: Text(appBarTitle),
       ),
       body: Container(
         margin: const EdgeInsets.only(top: 0, bottom: 0, left: 30, right: 30),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            Text(subtitle),
+            title != "null"
+                ? Text(
+                    title,
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.bold),
+                  )
+                : SizedBox(),
+            subtitle != "null" ? Text(subtitle) : SizedBox(),
             const SizedBox(height: 25),
             Container(
               width: MediaQuery.of(context).size.width,
