@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/widgets/grocery_item_card_widget.dart';
 import 'package:grocery_app/widgets/search_bar_widget.dart';
 
+import '../../models/merchant.dart';
 import '../category_items_screen.dart';
 import 'grocery_featured_Item_widget.dart';
 import 'home_banner_widget.dart';
@@ -18,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool shouldFetchData = false;
+  bool shouldFetchData = true;
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
         if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text('Loading...');
+          return Center(child: Text('Loading...'));
         }
 
         final List<DocumentSnapshot<Map<String, dynamic>>> documents =
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // Create a GroceryItem object using the fetched data
           final GroceryItem item = GroceryItem(
+            id: int.parse(document.id),
             name: data!['name'],
             price: double.parse(data['price'].toString()),
             description: data['quantity'] +
@@ -73,121 +75,160 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         });
 
-        return Scaffold(
-          body: SafeArea(
-            child: Container(
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Column(
-                    children: [
-                      // Button untuk debugging
-                      // ElevatedButton(
-                      //   onPressed: () => showEditLocationDialog(context),
-                      //   child: Text("Open Edit Location"),
-                      // ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          icon(),
-                          SizedBox(
-                            width: 25,
-                          ),
-                          AppText(
-                            text: "E-PASAR: \nBuah & Sayur",
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                            color: Color(0xFF2A881E),
-                            glowColor: Color(0xFFA8FF8D),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      padded(SearchBarWidget()),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      padded(HomeBanner()),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      padded(subTitle("Buah-buahan", true)),
-                      getHorizontalItemSlider(exclusiveOffers),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      padded(subTitle("Sayur-mayur", true)),
-                      getHorizontalItemSlider(bestSelling),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      padded(subTitle("Daftar Katalog", false)),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Container(
-                        height: 105,
-                        child: ListView(
-                          padding: EdgeInsets.zero,
-                          scrollDirection: Axis.horizontal,
+        return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+            stream: shouldFetchData
+                ? FirebaseFirestore.instance.collection('merchants').snapshots()
+                : null, // Pass null to disable the stream
+            builder: (BuildContext context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                    merchantSnapshot) {
+              if (merchantSnapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+
+              if (merchantSnapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: Text('Loading...'));
+              }
+
+              final List<DocumentSnapshot<Map<String, dynamic>>>
+                  merchantDocuments = merchantSnapshot.data?.docs ?? [];
+
+              // Create a list to hold the merchant data
+              if (shouldFetchData) {
+                daftarToko.clear();
+              }
+
+              merchantDocuments.forEach((merchantDocument) {
+                final Map<String, dynamic>? merchantData =
+                    merchantDocument.data();
+
+                // Create a Toko object using the fetched data
+                final Toko toko = Toko(
+                  id: merchantDocument.id,
+                  nama: merchantData!['nama'],
+                  alamat: merchantData['alamat'],
+                );
+
+                // Add the Toko object to the list
+                daftarToko.add(toko);
+              });
+
+              return Scaffold(
+                body: SafeArea(
+                  child: Container(
+                    child: SingleChildScrollView(
+                      child: Center(
+                        child: Column(
                           children: [
+                            // Button untuk debugging
+                            // ElevatedButton(
+                            //   onPressed: () => {},
+                            //   child: Text(daftarToko[2].id),
+                            // ),
                             SizedBox(
-                              width: 20,
+                              height: 15,
                             ),
-                            GestureDetector(
-                              onTap: () => {
-                                Navigator.of(context)
-                                    .push(new MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                    return CategoryItemsScreen(
-                                        productType: "Sayur-mayur");
-                                  },
-                                )),
-                              },
-                              child: GroceryFeaturedCard(
-                                groceryFeaturedItems[0],
-                                color: Color(0xffF8A44C),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                icon(),
+                                SizedBox(
+                                  width: 25,
+                                ),
+                                AppText(
+                                  text: "E-PASAR: \nBuah & Sayur",
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w600,
+                                  color: Color(0xFF2A881E),
+                                  glowColor: Color(0xFFA8FF8D),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            padded(SearchBarWidget()),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            padded(HomeBanner()),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            padded(subTitle("Buah-buahan", true)),
+                            getHorizontalItemSlider(itemsBuah),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            padded(subTitle("Sayur-mayur", true)),
+                            getHorizontalItemSlider(itemsSayur),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            padded(subTitle("Daftar Katalog", false)),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                              height: 105,
+                              child: ListView(
+                                padding: EdgeInsets.zero,
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => {
+                                      Navigator.of(context)
+                                          .push(new MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return CategoryItemsScreen(
+                                              productType: "Buah-buahan");
+                                        },
+                                      )),
+                                    },
+                                    child: GroceryFeaturedCard(
+                                      groceryFeaturedItems[0],
+                                      color: Color(0xffF8A44C),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () => {
+                                      Navigator.of(context)
+                                          .push(new MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return CategoryItemsScreen(
+                                              productType: "Sayur-mayur");
+                                        },
+                                      )),
+                                    },
+                                    child: GroceryFeaturedCard(
+                                      groceryFeaturedItems[1],
+                                      color: AppColors.primaryColor,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
                               ),
                             ),
                             SizedBox(
-                              width: 20,
-                            ),
-                            GestureDetector(
-                              onTap: () => {
-                                Navigator.of(context)
-                                    .push(new MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                    return CategoryItemsScreen(
-                                        productType: "Buah-buahan");
-                                  },
-                                )),
-                              },
-                              child: GroceryFeaturedCard(
-                                groceryFeaturedItems[1],
-                                color: AppColors.primaryColor,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 20,
+                              height: 15,
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-        );
+              );
+            });
       },
     );
   }

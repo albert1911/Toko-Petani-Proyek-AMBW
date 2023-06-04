@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../models/grocery_item.dart';
+import '../../models/merchant.dart';
 
 class EditDataDialog extends StatefulWidget {
   final String currentLocation;
@@ -52,8 +52,8 @@ class _EditDataDialogState extends State<EditDataDialog> {
             SizedBox(height: 16),
             Text(
               widget.editType == "quantity"
-                  ? 'Kuantitas saat ini'
-                  : 'Toko yang terpilih',
+                  ? '→ Kuantitas saat ini'
+                  : '→ Toko yang terpilih sekarang',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 5),
@@ -66,11 +66,17 @@ class _EditDataDialogState extends State<EditDataDialog> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 5),
             Text(
               widget.editType == "quantity"
-                  ? 'Pilih kuantitas lain'
-                  : 'Pilih toko lain',
+                  ? ''
+                  : daftarToko[int.parse(widget.currentLocation)].alamat,
+            ),
+            SizedBox(height: 25),
+            Text(
+              widget.editType == "quantity"
+                  ? '→ Pilih kuantitas lain'
+                  : '→ Pilih toko lain',
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 3),
@@ -90,9 +96,9 @@ class _EditDataDialogState extends State<EditDataDialog> {
                         final index = entry.key;
                         final value = entry.value;
                         final stockAmount = widget.stockAmounts[index];
-                        final merchant = daftarToko
-                            .firstWhere((toko) => toko.id == int.parse(value));
-                        final merchantName = merchant.name;
+                        final merchant =
+                            daftarToko.firstWhere((toko) => toko.id == value);
+                        final merchantName = merchant.nama;
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Row(

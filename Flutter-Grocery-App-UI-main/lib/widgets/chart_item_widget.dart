@@ -6,8 +6,12 @@ import 'package:grocery_app/styles/colors.dart';
 import 'item_counter_widget.dart';
 
 class ChartItemWidget extends StatefulWidget {
-  ChartItemWidget({Key? key, required this.item}) : super(key: key);
+  ChartItemWidget(
+      {Key? key, required this.item, this.quantity, this.onUpdateQuantity})
+      : super(key: key);
   final GroceryItem item;
+  final double? quantity;
+  final Function(double)? onUpdateQuantity;
 
   @override
   _ChartItemWidgetState createState() => _ChartItemWidgetState();
@@ -20,7 +24,13 @@ class _ChartItemWidgetState extends State<ChartItemWidget> {
 
   final double borderRadius = 18;
 
-  int amount = 1;
+  late double amount;
+
+  @override
+  void initState() {
+    super.initState();
+    amount = widget.quantity ?? 1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +57,7 @@ class _ChartItemWidgetState extends State<ChartItemWidget> {
                   height: 5,
                 ),
                 AppText(
-                    text: widget.item.description,
+                    text: widget.item.quantity,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: AppColors.darkGrey),
@@ -56,12 +66,14 @@ class _ChartItemWidgetState extends State<ChartItemWidget> {
                 ),
                 Spacer(),
                 ItemCounterWidget(
-                  onAmountChanged: (newAmount) {
-                    setState(() {
-                      amount = newAmount;
-                    });
-                  },
-                )
+                    onAmountChanged: (newAmount) {
+                      setState(() {
+                        amount = newAmount;
+                        widget.onUpdateQuantity!(amount);
+                      });
+                    },
+                    initialAmount: widget.quantity,
+                    isKilo: widget.quantity! % 1 != 0)
               ],
             ),
             Column(
@@ -77,7 +89,7 @@ class _ChartItemWidgetState extends State<ChartItemWidget> {
                 Container(
                   width: 70,
                   child: AppText(
-                    text: "\$${getPrice().toStringAsFixed(2)}",
+                    text: "Rp. ${getPrice().toStringAsFixed(3)}",
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     textAlign: TextAlign.right,

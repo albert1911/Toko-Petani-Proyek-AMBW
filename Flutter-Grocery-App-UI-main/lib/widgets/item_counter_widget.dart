@@ -4,14 +4,26 @@ import 'package:grocery_app/styles/colors.dart';
 class ItemCounterWidget extends StatefulWidget {
   final Function? onAmountChanged;
 
-  const ItemCounterWidget({Key? key, this.onAmountChanged}) : super(key: key);
+  const ItemCounterWidget(
+      {Key? key, this.onAmountChanged, this.initialAmount, this.isKilo})
+      : super(key: key);
+  final double? initialAmount;
+  final bool? isKilo;
 
   @override
   _ItemCounterWidgetState createState() => _ItemCounterWidgetState();
 }
 
 class _ItemCounterWidgetState extends State<ItemCounterWidget> {
-  int amount = 1;
+  late double amount;
+  late bool isKilo;
+
+  @override
+  void initState() {
+    super.initState();
+    amount = widget.initialAmount ?? 1;
+    isKilo = widget.isKilo ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +36,10 @@ class _ItemCounterWidgetState extends State<ItemCounterWidget> {
             width: 30,
             child: Center(
                 child: getText(
-                    text: amount.toString(), fontSize: 18, isBold: true))),
+                    text:
+                        isKilo ? amount.toString() : amount.toInt().toString(),
+                    fontSize: 15,
+                    isBold: true))),
         SizedBox(width: 18),
         iconWidget(Icons.add,
             iconColor: AppColors.primaryColor, onPressed: incrementAmount)
@@ -34,7 +49,11 @@ class _ItemCounterWidgetState extends State<ItemCounterWidget> {
 
   void incrementAmount() {
     setState(() {
-      amount = amount + 1;
+      if (isKilo) {
+        amount = amount + 0.25;
+      } else {
+        amount = amount + 1;
+      }
       updateParent();
     });
   }
@@ -42,7 +61,11 @@ class _ItemCounterWidgetState extends State<ItemCounterWidget> {
   void decrementAmount() {
     if (amount <= 0) return;
     setState(() {
-      amount = amount - 1;
+      if (isKilo) {
+        amount = amount - 0.25;
+      } else {
+        amount = amount - 1;
+      }
       updateParent();
     });
   }

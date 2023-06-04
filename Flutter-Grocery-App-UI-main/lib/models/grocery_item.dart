@@ -31,25 +31,6 @@ class Stock {
   });
 }
 
-class Toko {
-  final int id;
-  final String name;
-  final String alamat;
-
-  Toko({
-    required this.id,
-    required this.name,
-    required this.alamat,
-  });
-}
-
-// List temporary digunakan agar akses ke database tidak kena limit saat melakukan debugging
-var daftarToko = [
-  Toko(id: 1, name: "Pasar Mekar", alamat: "Jl. Semar 234"),
-  Toko(id: 2, name: "Jaya Makmur", alamat: "Jl. Merdeka 123"),
-  Toko(id: 3, name: "Pasar Enam Juni", alamat: "Jl. Pancasila 36"),
-];
-
 var demoItems = [
   GroceryItem(
       id: 1,
@@ -115,14 +96,12 @@ var bestSelling = [demoItems[2], demoItems[3]];
 var groceries = [demoItems[4], demoItems[5]];
 var beverages = demoItems;
 
+var unknownProduct = GroceryItem(
+    name: "Unknown",
+    description: "description",
+    price: 0,
+    imagePath: "assets/images/barang_jualan/unknown.jpg",
+    quantity: "quantity");
+
 final List<GroceryItem> itemsSayur = [];
 final List<GroceryItem> itemsBuah = [];
-
-String getLocationName(String locationId) {
-  Toko? selectedToko = daftarToko.firstWhere(
-    (toko) => toko.id == int.parse(locationId),
-    orElse: () => Toko(id: 0, name: "Unknown", alamat: ""),
-  );
-
-  return selectedToko.name;
-}
