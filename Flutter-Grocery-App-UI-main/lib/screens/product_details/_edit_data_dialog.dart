@@ -45,7 +45,7 @@ class _EditDataDialogState extends State<EditDataDialog> {
             Text(
               widget.editType == "quantity" ? 'Ubah Kuantitas' : 'Ubah Toko',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -121,19 +121,38 @@ class _EditDataDialogState extends State<EditDataDialog> {
                       .toList(),
             ),
             SizedBox(height: 16),
-            Align(
-              alignment: Alignment.centerRight,
-              child: ElevatedButton(
-                onPressed: () async {
-                  // Save the selected location and close the dialog
-                  widget.onLocationSelected(selectedLocation);
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Simpan',
-                  style: TextStyle(fontSize: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Row(
+                    children: [
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Batal',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      ElevatedButton(
+                        onPressed: () async {
+                          // Save the selected location and close the dialog
+                          widget.onLocationSelected(selectedLocation);
+                          Navigator.pop(context);
+                        },
+                        child: Text(
+                          'Simpan',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),

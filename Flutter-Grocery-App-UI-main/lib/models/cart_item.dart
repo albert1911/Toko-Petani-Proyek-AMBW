@@ -1,4 +1,6 @@
 import 'package:grocery_app/models/grocery_item.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class CartItem {
   final List<String> idProducts;
@@ -10,13 +12,53 @@ class CartItem {
     required this.idMerchant,
     required this.quantity,
   });
+
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      idProducts: List<String>.from(json['idProducts']),
+      idMerchant: json['idMerchant'],
+      quantity: List<double>.from(json['quantity']),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'idProducts': idProducts,
+      'idMerchant': idMerchant,
+      'quantity': quantity,
+    };
+  }
 }
 
-var cartItems = [
-  CartItem(idProducts: ["1", "2"], idMerchant: "1", quantity: [3, 3.5]),
-  CartItem(idProducts: ["1"], idMerchant: "2", quantity: [3]),
-  CartItem(idProducts: ["2"], idMerchant: "3", quantity: [1.25]),
-];
+List<CartItem> cartItems = [];
+
+Future<void> saveCart() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<Map<String, dynamic>> cartItemsJson =
+      cartItems.map((item) => item.toJson()).toList();
+  String cartItemsString = jsonEncode(cartItemsJson);
+  await prefs.setString("cart", cartItemsString);
+
+  print('Data saved successfully.');
+}
+
+Future<List<CartItem>> loadCart() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? cartItemsString = prefs.getString("cart");
+  if (cartItemsString != null) {
+    List<dynamic> cartItemsJson = jsonDecode(cartItemsString);
+    List<CartItem> loadedCartItems =
+        cartItemsJson.map((json) => CartItem.fromJson(json)).toList();
+    return loadedCartItems;
+  } else {
+    return [];
+  }
+}
+
+Future<void> clearCart() async {
+  cartItems.clear();
+  saveCart();
+}
 
 GroceryItem getGroceryItemById(String id) {
   GroceryItem foundItem = itemsSayur.firstWhere(

@@ -5,12 +5,22 @@ import 'package:grocery_app/styles/colors.dart';
 import 'navigator_item.dart';
 
 class DashboardScreen extends StatefulWidget {
+  final int initialIndex;
+
+  DashboardScreen({required this.initialIndex});
+
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex;
+  }
 
   @override
   Widget build(BuildContext context) {

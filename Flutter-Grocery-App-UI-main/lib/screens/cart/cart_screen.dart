@@ -6,6 +6,8 @@ import 'package:grocery_app/models/merchant.dart';
 import 'package:grocery_app/widgets/chart_item_widget.dart';
 import 'package:collection/collection.dart';
 
+import '../../widgets/_confirmation_dialog.dart';
+import '../dashboard/dashboard_screen.dart';
 import 'checkout_bottom_sheet.dart';
 
 class CartScreen extends StatefulWidget {
@@ -14,9 +16,24 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  Toko merchant = daftarToko[int.parse(cartItems[0].idMerchant)];
+  late Toko merchant;
+  bool isCartEmpty = false;
   int checked = 0;
   List<double> totalPriceList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (cartItems.isNotEmpty) {
+      merchant = daftarToko[int.parse(cartItems[0].idMerchant)];
+      isCartEmpty = false;
+    } else {
+      isCartEmpty = true;
+    }
+
+    loadCart();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +52,122 @@ class _CartScreenState extends State<CartScreen> {
               SizedBox(
                 height: 20,
               ),
+              getCartItems(),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget getCheckoutButton(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+      child: AppButton(
+        label: "Lakukan Check Out",
+        fontWeight: FontWeight.w600,
+        padding: EdgeInsets.symmetric(vertical: 30),
+        onPressed: () {
+          showBottomSheet(context);
+        },
+      ),
+    );
+  }
+
+  Widget getButtonPriceWidget(int cartIndex) {
+    return Container(
+      padding: EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        totalPriceList.isNotEmpty
+            ? "Harga Total: Rp. ${totalPriceList[cartIndex].toStringAsFixed(3)}"
+            : "",
+        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
+      ),
+    );
+  }
+
+  Widget getEmptyCartButton() {
+    return !isCartEmpty
+        ? ElevatedButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return ConfirmationDialog(
+                    title: 'Kosongkan Keranjang',
+                    message: 'Anda yakin ingin mengosongkan keranjang?',
+                    buttonAFunction: () {
+                      Navigator.pop(context);
+                      clearCart();
+                      loadCart();
+                      setState(() {
+                        isCartEmpty = true;
+                        totalPriceList.clear();
+                      });
+                    },
+                    buttonBFunction: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Text(
+                "Kosongkan Keranjang",
+                style: TextStyle(fontSize: 14),
+              ),
+            ),
+          )
+        : SizedBox(height: 1);
+  }
+
+  Widget getCartItems() {
+    return isCartEmpty
+        ? Center(
+            child: Column(
+            children: [
+              Image.asset(
+                'assets/images/keranjang_kosong.jpg',
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
+              Text('Keranjang belanja masih kosong',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              SizedBox(height: 10),
+              Text('Silahkan masukkan produk sayur & buah favorit anda.'),
+              SizedBox(height: 25),
+              Container(
+                width: 200,
+                child: AppButton(
+                  label: "Belanja Sekarang",
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return DashboardScreen(initialIndex: 0);
+                      },
+                    ));
+                  },
+                ),
+              ),
+            ],
+          ))
+        : Column(
+            children: [
               Column(
                 children: List<Widget>.generate(cartItems.length, (cartIndex) {
                   final cartItem = cartItems[cartIndex];
@@ -57,7 +190,6 @@ class _CartScreenState extends State<CartScreen> {
                               onChanged: (value) {
                                 setState(() {
                                   checked = cartIndex;
-                                  calculateTotalPrice(cartIndex);
                                 });
                               }),
                           Text(
@@ -106,43 +238,20 @@ class _CartScreenState extends State<CartScreen> {
                   );
                 }),
               ),
+              Container(
+                margin: EdgeInsets.only(right: 16),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: getEmptyCartButton(),
+                ),
+              ),
               Divider(
                 thickness: 1,
               ),
               getButtonPriceWidget(checked),
               getCheckoutButton(context),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget getCheckoutButton(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-      child: AppButton(
-        label: "Lakukan Check Out",
-        fontWeight: FontWeight.w600,
-        padding: EdgeInsets.symmetric(vertical: 30),
-        onPressed: () {
-          showBottomSheet(context);
-        },
-      ),
-    );
-  }
-
-  Widget getButtonPriceWidget(int cartIndex) {
-    return Container(
-      padding: EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        "Harga Total: Rp. ${totalPriceList[cartIndex].toStringAsFixed(3)}",
-        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
-      ),
-    );
+          );
   }
 
   void showBottomSheet(context) {

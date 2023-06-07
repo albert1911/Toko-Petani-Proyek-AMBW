@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // FETCH DATA FROM PRODUCTS TABLE
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
       stream: shouldFetchData
           ? FirebaseFirestore.instance.collection('products').snapshots()
@@ -46,11 +47,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
         documents.forEach((document) {
           final Map<String, dynamic>? data = document.data();
+          String locationNames =
+              List<String>.from(data!['stock']['id-merchant'])
+                  .map((id) => getLocationName(id))
+                  .join(',\n');
 
           // Create a GroceryItem object using the fetched data
           final GroceryItem item = GroceryItem(
             id: int.parse(document.id),
-            name: data!['name'],
+            name: data['name'],
             price: double.parse(data['price'].toString()),
             description: data['quantity'] +
                 ", Total stok: " +
@@ -58,7 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     .map((string) => int.parse(string))
                     .toList()
                     .reduce((value, element) => value + element)
-                    .toString(),
+                    .toString() +
+                "\n$locationNames",
             quantity: data['quantity'],
             imagePath: "assets/images/barang_jualan/" + data['name'] + ".jpg",
             details: Stock(
@@ -75,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         });
 
+        // FETCH DATA FROM MERCHANTS TABLE
         return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
             stream: shouldFetchData
                 ? FirebaseFirestore.instance.collection('merchants').snapshots()
@@ -93,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
               final List<DocumentSnapshot<Map<String, dynamic>>>
                   merchantDocuments = merchantSnapshot.data?.docs ?? [];
 
-              // Create a list to hold the merchant data
+              // Clear previous list to avoid duplicate data
               if (shouldFetchData) {
                 daftarToko.clear();
               }
@@ -243,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget getHorizontalItemSlider(List<GroceryItem> items) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      height: 250,
+      height: 300,
       child: ListView.separated(
         padding: EdgeInsets.symmetric(horizontal: 20),
         itemCount: items.length,

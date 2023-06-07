@@ -21,3 +21,5 @@ class MyUser {
         alamat: json['alamat'],
       );
 }
+
+bool isLoggedIn = false;

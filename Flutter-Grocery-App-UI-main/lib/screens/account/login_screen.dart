@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:grocery_app/models/user.dart';
 import 'package:grocery_app/screens/account/register_screen.dart';
 import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
 import 'package:provider/provider.dart';
@@ -90,9 +91,13 @@ class _LoginState extends State<Login> {
         setState(() {
           errorMessage = '';
         });
+
+        isLoggedIn = true;
+
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => DashboardScreen()),
+          MaterialPageRoute(
+              builder: (context) => DashboardScreen(initialIndex: 0)),
         );
       }
     } on FirebaseAuthException catch (e) {

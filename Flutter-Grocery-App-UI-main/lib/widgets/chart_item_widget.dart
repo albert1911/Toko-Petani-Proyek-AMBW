@@ -3,6 +3,7 @@ import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/grocery_item.dart';
 import 'package:grocery_app/styles/colors.dart';
 
+import '_confirmation_dialog.dart';
 import 'item_counter_widget.dart';
 
 class ChartItemWidget extends StatefulWidget {
@@ -78,10 +79,25 @@ class _ChartItemWidgetState extends State<ChartItemWidget> {
             ),
             Column(
               children: [
-                Icon(
-                  Icons.close,
-                  color: AppColors.darkGrey,
-                  size: 25,
+                GestureDetector(
+                  onTap: () => {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ConfirmationDialog(
+                          message: 'Are you sure?',
+                          title: 'Confirmation',
+                          buttonAFunction: () => {Navigator.pop(context)},
+                          buttonBFunction: () => {Navigator.pop(context)},
+                        );
+                      },
+                    ),
+                  },
+                  child: Icon(
+                    Icons.close,
+                    color: AppColors.darkGrey,
+                    size: 25,
+                  ),
                 ),
                 Spacer(
                   flex: 5,
