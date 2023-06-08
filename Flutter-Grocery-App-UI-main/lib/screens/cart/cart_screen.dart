@@ -219,6 +219,9 @@ class _CartScreenState extends State<CartScreen> {
                                   updateCartItemQuantity(
                                       newQuantity, cartIndex, index);
                                 },
+                                onDeleteItem: () {
+                                  deleteCartItem(index.toString());
+                                },
                               ),
                             );
                           }).toList(),
@@ -268,6 +271,19 @@ class _CartScreenState extends State<CartScreen> {
     setState(() {
       cartItems[cartindex].quantity[index] = quantity;
       calculateTotalPrice(cartindex);
+    });
+  }
+
+  void deleteCartItem(String itemIndex) {
+    setState(() {
+      cartItems.removeAt(int.parse(itemIndex));
+
+      if (cartItems.isEmpty) {
+        isCartEmpty = true;
+      }
+
+      saveCart();
+      loadCart();
     });
   }
 

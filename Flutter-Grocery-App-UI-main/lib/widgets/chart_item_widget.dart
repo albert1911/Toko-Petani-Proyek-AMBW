@@ -8,11 +8,16 @@ import 'item_counter_widget.dart';
 
 class ChartItemWidget extends StatefulWidget {
   ChartItemWidget(
-      {Key? key, required this.item, this.quantity, this.onUpdateQuantity})
+      {Key? key,
+      required this.item,
+      this.quantity,
+      this.onUpdateQuantity,
+      required this.onDeleteItem})
       : super(key: key);
   final GroceryItem item;
   final double? quantity;
   final Function(double)? onUpdateQuantity;
+  final VoidCallback onDeleteItem;
 
   @override
   _ChartItemWidgetState createState() => _ChartItemWidgetState();
@@ -85,9 +90,13 @@ class _ChartItemWidgetState extends State<ChartItemWidget> {
                       context: context,
                       builder: (BuildContext context) {
                         return ConfirmationDialog(
-                          message: 'Are you sure?',
-                          title: 'Confirmation',
-                          buttonAFunction: () => {Navigator.pop(context)},
+                          message:
+                              'Yakin ingin menghapus produk dari keranjang belanja anda? Anda dapat menambahkannya kembali pada halaman produk.',
+                          title: 'Hapus Produk',
+                          buttonAFunction: () {
+                            Navigator.pop(context);
+                            widget.onDeleteItem();
+                          },
                           buttonBFunction: () => {Navigator.pop(context)},
                         );
                       },
