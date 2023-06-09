@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
-import 'package:grocery_app/screens/order_accepted_screen.dart';
+import 'package:grocery_app/screens/account/login_screen.dart';
+import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
 
 class OrderFailedDialogue extends StatelessWidget {
   @override
@@ -50,7 +51,7 @@ class OrderFailedDialogue extends StatelessWidget {
               flex: 5,
             ),
             AppText(
-              text: "Oops! Order Failed",
+              text: "Check Out Gagal!",
               fontSize: 28,
               fontWeight: FontWeight.w600,
             ),
@@ -58,7 +59,8 @@ class OrderFailedDialogue extends StatelessWidget {
               flex: 2,
             ),
             AppText(
-              text: "Something went temply wrong",
+              text:
+                  "Harap masuk ke akun Anda terlebih dahulu sebelum melakukan check out.",
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Color(0xff7C7C7C),
@@ -67,14 +69,20 @@ class OrderFailedDialogue extends StatelessWidget {
               flex: 8,
             ),
             AppButton(
-              label: "Please Try Again",
+              label: "Lakukan Login",
               fontWeight: FontWeight.w600,
               onPressed: () {
+                Navigator.pop(context);
                 Navigator.of(context).pushReplacement(new MaterialPageRoute(
                   builder: (BuildContext context) {
-                    return OrderAcceptedScreen();
+                    return Login();
                   },
                 ));
+                // Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                //   builder: (BuildContext context) {
+                //     return OrderAcceptedScreen();
+                //   },
+                // ));
               },
             ),
             Spacer(
@@ -83,9 +91,14 @@ class OrderFailedDialogue extends StatelessWidget {
             InkWell(
               onTap: () {
                 Navigator.pop(context);
+                Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return DashboardScreen(initialIndex: 0);
+                  },
+                ));
               },
               child: AppText(
-                text: "Back To Home",
+                text: "Kembali ke Beranda",
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
               ),

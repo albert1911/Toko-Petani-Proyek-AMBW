@@ -6,8 +6,10 @@ import 'package:grocery_app/models/merchant.dart';
 import 'package:grocery_app/widgets/chart_item_widget.dart';
 import 'package:collection/collection.dart';
 
+import '../../models/user.dart';
 import '../../widgets/_confirmation_dialog.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../order_failed_dialog.dart';
 import 'checkout_bottom_sheet.dart';
 
 class CartScreen extends StatefulWidget {
@@ -71,7 +73,15 @@ class _CartScreenState extends State<CartScreen> {
         fontWeight: FontWeight.w600,
         padding: EdgeInsets.symmetric(vertical: 30),
         onPressed: () {
-          showBottomSheet(context);
+          if (isLoggedIn) {
+            showBottomSheet(context);
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return OrderFailedDialogue();
+                });
+          }
         },
       ),
     );
@@ -258,6 +268,8 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void showBottomSheet(context) {
+    totalCost = totalPriceList[checked];
+
     showModalBottomSheet(
         context: context,
         isScrollControlled: true,

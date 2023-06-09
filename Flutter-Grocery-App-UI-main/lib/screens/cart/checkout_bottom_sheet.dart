@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
+import 'package:grocery_app/screens/order_accepted_screen.dart';
 
-import '../order_failed_dialog.dart';
+import '../../models/cart_item.dart';
+import '../../widgets/_confirmation_dialog.dart';
 
 class CheckoutBottomSheet extends StatefulWidget {
   @override
@@ -43,19 +45,20 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
           SizedBox(
             height: 45,
           ),
-          getDivider(),
-          checkoutRow("Delivery", trailingText: "Select Method"),
+          // getDivider(),
+          // checkoutRow("Delivery", trailingText: "Select Method"),
           getDivider(),
           checkoutRow(
-            "Payment",
+            "Pembayaran",
             trailingWidget: Icon(
               Icons.payment,
             ),
           ),
           getDivider(),
-          checkoutRow("Promo Code", trailingText: "Pick Discount"),
+          checkoutRow("Kode Promo", trailingText: "Pilih Diskon"),
           getDivider(),
-          checkoutRow("Total Cost", trailingText: "\$13.97"),
+          checkoutRow("Total Harga",
+              trailingText: "Rp. ${totalCost.toStringAsFixed(3)}"),
           getDivider(),
           SizedBox(
             height: 30,
@@ -66,7 +69,7 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
               top: 25,
             ),
             child: AppButton(
-              label: "Place Order",
+              label: "Lakukan Pemesanan",
               // fontWeight: FontWeight.w600,
               padding: EdgeInsets.symmetric(
                 vertical: 25,
@@ -152,11 +155,27 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
   }
 
   void onPlaceOrderClicked() {
-    Navigator.pop(context);
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return OrderFailedDialogue();
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmationDialog(
+          title: 'Lakukan Pemesanan',
+          message:
+              'Setelah pemesanan dilakukan saldo akan berkurang sesuai total harga yang tertulis.',
+          buttonAFunction: () {
+            // lakukan pengecekkan harga bila akan menggunakan saldo virtual.
+            Navigator.pop(context);
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return OrderAcceptedScreen();
+                });
+          },
+          buttonBFunction: () {
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
   }
 }

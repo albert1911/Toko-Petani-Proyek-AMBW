@@ -13,14 +13,14 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setUserName() {
-    _userName = getUserName(_userEmail!).toString();
+  void setUserName() async {
+    _userName = await getUserName(_userEmail!);
     notifyListeners();
   }
 }
 
-Future<String?> getUserName(String userEmail) async {
-  String? userName;
+Future<String> getUserName(String userEmail) async {
+  String userName = '';
 
   try {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -30,7 +30,7 @@ Future<String?> getUserName(String userEmail) async {
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      userName = querySnapshot.docs.first.get('nama');
+      userName = querySnapshot.docs.first.get('nama') ?? '';
     }
   } catch (e) {
     print('Error retrieving user name: $e');

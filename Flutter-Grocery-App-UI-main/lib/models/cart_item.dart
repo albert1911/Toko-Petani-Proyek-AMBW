@@ -31,6 +31,7 @@ class CartItem {
 }
 
 List<CartItem> cartItems = [];
+double totalCost = 0;
 
 Future<void> saveCart() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();

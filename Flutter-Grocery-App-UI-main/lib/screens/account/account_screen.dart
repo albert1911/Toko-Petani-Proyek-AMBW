@@ -9,6 +9,7 @@ import 'package:grocery_app/styles/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 
+import '../../models/user.dart';
 import '_user_provider.dart';
 import 'account_item.dart';
 
@@ -112,6 +113,7 @@ class AccountScreen extends StatelessWidget {
           if (userProvider.userEmail != null) {
             userProvider.setUserEmail(null);
             userProvider.setUserName();
+            isLoggedIn = false;
 
             try {
               await FirebaseAuth.instance.signOut();

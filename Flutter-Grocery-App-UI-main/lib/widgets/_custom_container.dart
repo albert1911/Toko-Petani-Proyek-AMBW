@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../screens/dashboard/dashboard_screen.dart';
 import '../styles/colors.dart';
 
 class CustomContainer extends StatelessWidget {
@@ -37,7 +38,11 @@ class CustomContainer extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.of(context).pushReplacement(new MaterialPageRoute(
+              builder: (BuildContext context) {
+                return DashboardScreen(initialIndex: 4);
+              },
+            ));
           },
         ),
         title: Text(appBarTitle),
