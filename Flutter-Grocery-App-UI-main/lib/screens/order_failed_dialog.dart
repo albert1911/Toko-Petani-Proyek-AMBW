@@ -78,11 +78,6 @@ class OrderFailedDialogue extends StatelessWidget {
                     return Login();
                   },
                 ));
-                // Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                //   builder: (BuildContext context) {
-                //     return OrderAcceptedScreen();
-                //   },
-                // ));
               },
             ),
             Spacer(

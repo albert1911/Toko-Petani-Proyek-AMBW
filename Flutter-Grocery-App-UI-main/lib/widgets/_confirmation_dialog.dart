@@ -27,11 +27,21 @@ class _ConfirmationDialogState extends State<ConfirmationDialog> {
       actions: [
         TextButton(
           onPressed: widget.buttonBFunction,
+          style: TextButton.styleFrom(foregroundColor: Color(0xFF2A881E)),
           child: const Text('Batalkan'),
         ),
         ElevatedButton(
           onPressed: widget.buttonAFunction,
-          child: Text(widget.title),
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Color(0xFF2A881E),
+            backgroundColor: Color(0xFFFEFFB5),
+          ),
+          child: Text(
+            widget.title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ],
     );

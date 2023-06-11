@@ -37,7 +37,7 @@ class _EditDataDialogState extends State<EditDataDialog> {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(25),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,6 +132,8 @@ class _EditDataDialogState extends State<EditDataDialog> {
                         onPressed: () async {
                           Navigator.pop(context);
                         },
+                        style: TextButton.styleFrom(
+                            foregroundColor: Color(0xFF2A881E)),
                         child: Text(
                           'Batal',
                           style: TextStyle(fontSize: 16),
@@ -144,9 +146,16 @@ class _EditDataDialogState extends State<EditDataDialog> {
                           widget.onLocationSelected(selectedLocation);
                           Navigator.pop(context);
                         },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Color(0xFF2A881E),
+                          backgroundColor: Color(0xFFFEFFB5),
+                        ),
                         child: Text(
                           'Simpan',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],

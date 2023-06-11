@@ -11,7 +11,7 @@ import 'package:grocery_app/widgets/search_bar_widget.dart';
 import '../../models/merchant.dart';
 import '../category_items_screen.dart';
 import 'grocery_featured_Item_widget.dart';
-import 'home_banner_widget.dart';
+// import 'home_banner_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -20,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool shouldFetchData = true;
+  bool isFiltered = false;
+  String searchedKeyword = "";
 
   @override
   Widget build(BuildContext context) {
@@ -127,11 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Center(
                         child: Column(
                           children: [
-                            // Button untuk debugging
-                            // ElevatedButton(
-                            //   onPressed: () => {},
-                            //   child: Text(daftarToko[2].id),
-                            // ),
                             SizedBox(
                               height: 15,
                             ),
@@ -155,79 +152,102 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 15,
                             ),
-                            padded(SearchBarWidget()),
+                            padded(SearchBarWidget(
+                                updateIsFiltered: updateIsFiltered)),
                             SizedBox(
                               height: 25,
                             ),
-                            padded(HomeBanner()),
-                            SizedBox(
-                              height: 25,
-                            ),
-                            padded(subTitle("Buah-buahan", true)),
-                            getHorizontalItemSlider(itemsBuah),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            padded(subTitle("Sayur-mayur", true)),
-                            getHorizontalItemSlider(itemsSayur),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            padded(subTitle("Daftar Katalog", false)),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Container(
-                              height: 105,
-                              child: ListView(
-                                padding: EdgeInsets.zero,
-                                scrollDirection: Axis.horizontal,
+                            if (!isFiltered)
+                              Column(
                                 children: [
+                                  padded(subTitle("Daftar Katalog", false)),
                                   SizedBox(
-                                    width: 20,
+                                    height: 15,
                                   ),
-                                  GestureDetector(
-                                    onTap: () => {
-                                      Navigator.of(context)
-                                          .push(new MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                          return CategoryItemsScreen(
-                                              productType: "Buah-buahan");
-                                        },
-                                      )),
-                                    },
-                                    child: GroceryFeaturedCard(
-                                      groceryFeaturedItems[0],
-                                      color: Color(0xffF8A44C),
+                                  Container(
+                                    height: 105,
+                                    child: ListView(
+                                      padding: EdgeInsets.zero,
+                                      scrollDirection: Axis.horizontal,
+                                      children: [
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () => {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return CategoryItemsScreen(
+                                                      productType:
+                                                          "Buah-buahan");
+                                                },
+                                              ),
+                                            ),
+                                          },
+                                          child: GroceryFeaturedCard(
+                                            groceryFeaturedItems[0],
+                                            color: Color(0xffF8A44C),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () => {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return CategoryItemsScreen(
+                                                      productType:
+                                                          "Sayur-mayur");
+                                                },
+                                              ),
+                                            ),
+                                          },
+                                          child: GroceryFeaturedCard(
+                                            groceryFeaturedItems[1],
+                                            color: AppColors.primaryColor,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 20,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   SizedBox(
-                                    width: 20,
+                                    height: 15,
                                   ),
-                                  GestureDetector(
-                                    onTap: () => {
-                                      Navigator.of(context)
-                                          .push(new MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                          return CategoryItemsScreen(
-                                              productType: "Sayur-mayur");
-                                        },
-                                      )),
-                                    },
-                                    child: GroceryFeaturedCard(
-                                      groceryFeaturedItems[1],
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  ),
+                                  padded(subTitle("Buah-buahan", true)),
+                                  getHorizontalItemSlider(itemsBuah),
                                   SizedBox(
-                                    width: 20,
+                                    height: 15,
+                                  ),
+                                  padded(subTitle("Sayur-mayur", true)),
+                                  getHorizontalItemSlider(itemsSayur),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                ],
+                              )
+                            else
+                              Column(
+                                children: [
+                                  padded(subTitle(
+                                      "Hasil Pencarian '$searchedKeyword'",
+                                      false)),
+                                  SizedBox(
+                                    height: 15,
+                                  ),
+                                  getHorizontalItemSlider(filteredItems),
+                                  SizedBox(
+                                    height: 15,
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
                           ],
                         ),
                       ),
@@ -275,6 +295,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void updateIsFiltered(bool value, String keyword) {
+    setState(() {
+      isFiltered = value;
+      searchedKeyword = keyword;
+    });
+    print("cek 123: " + keyword);
+  }
+
   void onItemClicked(BuildContext context, GroceryItem groceryItem) {
     Navigator.push(
       context,
@@ -295,12 +323,21 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Spacer(),
         if (showSeeAll)
-          Text(
-            "See All",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primaryColor),
+          GestureDetector(
+            onTap: () => {
+              Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return CategoryItemsScreen(productType: text);
+                },
+              )),
+            },
+            child: Text(
+              "See All",
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryColor),
+            ),
           ),
       ],
     );

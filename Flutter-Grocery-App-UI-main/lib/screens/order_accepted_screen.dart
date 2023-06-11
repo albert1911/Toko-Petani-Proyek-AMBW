@@ -22,7 +22,7 @@ class OrderAcceptedScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Text(
-                "You Order Has Been Accepted",
+                "Pesanan Anda Telah Kami Terima",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
               ),
@@ -31,7 +31,7 @@ class OrderAcceptedScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: Text(
-                "Your item has been placed and is on it's way to being processed",
+                "Pesanan anda telah kami terima dan sedang dalam proses untuk dikirimkan.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 16,
@@ -43,7 +43,7 @@ class OrderAcceptedScreen extends StatelessWidget {
               flex: 8,
             ),
             AppButton(
-              label: "Track Order",
+              label: "Lihat Riwayat Pesanan",
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -56,7 +56,7 @@ class OrderAcceptedScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
               child: Text(
-                "Back To Home",
+                "Kembali ke Halaman Utama",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),

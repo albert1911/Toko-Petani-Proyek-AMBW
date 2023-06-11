@@ -105,3 +105,4 @@ var unknownProduct = GroceryItem(
 
 final List<GroceryItem> itemsSayur = [];
 final List<GroceryItem> itemsBuah = [];
+List<GroceryItem> filteredItems = [];

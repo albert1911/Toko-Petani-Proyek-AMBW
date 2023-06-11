@@ -306,35 +306,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               padding: EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  !isExceed
-                      ? AppButton(
-                          label: "Lakukan Check Out",
-                          onPressed: () => {
-                            Navigator.pop(context),
-                            Navigator.pop(context),
-                            Navigator.of(context)
-                                .pushReplacement(new MaterialPageRoute(
-                              builder: (BuildContext context) {
-                                return DashboardScreen(initialIndex: 2);
-                              },
-                            )),
-                          },
-                          padding: EdgeInsets.zero,
-                        )
-                      : AppButton(
-                          label: "Periksa Keranjang Belanja",
-                          onPressed: () => {
-                            Navigator.pop(context),
-                            Navigator.pop(context),
-                            Navigator.of(context)
-                                .pushReplacement(new MaterialPageRoute(
-                              builder: (BuildContext context) {
-                                return DashboardScreen(initialIndex: 2);
-                              },
-                            )),
-                          },
-                          padding: EdgeInsets.zero,
-                        ),
+                  AppButton(
+                    label: !isExceed
+                        ? "Lakukan Check Out"
+                        : "Periksa Keranjang Belanja",
+                    onPressed: () => {
+                      Navigator.pop(context),
+                      Navigator.pop(context),
+                      Navigator.of(context)
+                          .pushReplacement(new MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return DashboardScreen(initialIndex: 1);
+                        },
+                      )),
+                    },
+                    padding: EdgeInsets.zero,
+                  ),
                   SizedBox(height: 10),
                   AppButton(
                     label: "Kembali Belanja",

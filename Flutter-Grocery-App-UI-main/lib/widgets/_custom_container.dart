@@ -40,7 +40,7 @@ class CustomContainer extends StatelessWidget {
           onPressed: () {
             Navigator.of(context).pushReplacement(new MaterialPageRoute(
               builder: (BuildContext context) {
-                return DashboardScreen(initialIndex: 4);
+                return DashboardScreen(initialIndex: 3);
               },
             ));
           },
