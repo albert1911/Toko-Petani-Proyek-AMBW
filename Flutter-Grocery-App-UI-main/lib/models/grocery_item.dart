@@ -30,6 +30,10 @@ class Stock {
     required this.stockAmounts,
   });
 }
+List<String> favoriteItems = [];
+
+
+
 
 var demoItems = [
   GroceryItem(

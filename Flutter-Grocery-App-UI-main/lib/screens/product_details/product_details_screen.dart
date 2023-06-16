@@ -73,7 +73,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         fontWeight: FontWeight.w600,
                         color: Color(0xff7C7C7C),
                       ),
-                      trailing: FavoriteToggleIcon(),
+                      trailing: FavoriteToggleIcon(productName: widget.groceryItem.name),
                     ),
                     Spacer(),
                     Row(
