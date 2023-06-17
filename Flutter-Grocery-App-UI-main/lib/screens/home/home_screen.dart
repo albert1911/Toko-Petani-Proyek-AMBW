@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
@@ -22,7 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
   bool shouldFetchData = true;
   bool isFiltered = false;
   String searchedKeyword = "";
-
+  @override
+    void initState(){
+      super.initState();
+      getListFromSharedPreferences(); 
+      
+    }
+  
   @override
   Widget build(BuildContext context) {
     // FETCH DATA FROM PRODUCTS TABLE

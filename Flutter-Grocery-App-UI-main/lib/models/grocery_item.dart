@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 class GroceryItem {
   final int? id;
   final String name;
@@ -30,7 +32,6 @@ class Stock {
     required this.stockAmounts,
   });
 }
-List<String> favoriteItems = [];
 
 
 
@@ -110,3 +111,18 @@ var unknownProduct = GroceryItem(
 final List<GroceryItem> itemsSayur = [];
 final List<GroceryItem> itemsBuah = [];
 List<GroceryItem> filteredItems = [];
+
+List<String> favoriteItems = [];
+
+Future<void> saveListToSharedPreferences() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setStringList('favourite', favoriteItems);
+  print('List saved to SharedPreferences');
+}
+
+  Future<void> getListFromSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();  
+   favoriteItems = prefs.getStringList('favourite')!;
+  
+ 
+  }
