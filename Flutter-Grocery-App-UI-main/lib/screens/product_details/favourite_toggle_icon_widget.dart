@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/models/grocery_item.dart';
-
 class FavoriteToggleIcon extends StatefulWidget {
   const FavoriteToggleIcon(
       {Key? key, required this.productName})
@@ -26,6 +25,7 @@ class _FavoriteToggleIconState extends State<FavoriteToggleIcon> {
        }else{
             favoriteItems.removeWhere((element) => element==widget.productName);
        }
+       saveListToSharedPreferences();
         
       },
       child: Icon(
