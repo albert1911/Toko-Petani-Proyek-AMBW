@@ -73,7 +73,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         fontWeight: FontWeight.w600,
                         color: Color(0xff7C7C7C),
                       ),
-                      trailing: FavoriteToggleIcon(productName: widget.groceryItem.name),
+                      trailing: FavoriteToggleIcon(
+                          productName: widget.groceryItem.name),
                     ),
                     Spacer(),
                     Row(
@@ -134,6 +135,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             widget.groceryItem.id.toString(),
                             cartAmount,
                           );
+
+                          if (cartItems.isEmpty) {
+                            loadCart();
+                          }
+
                           saveCart();
                           showCartDialog(false);
                         } else {

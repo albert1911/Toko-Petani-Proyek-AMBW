@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../models/history_entry.dart';
+
 class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -149,49 +151,3 @@ class HistoryDetailsPage extends StatelessWidget {
     }
   }
 }
-
-class HistoryEntry {
-  final String restaurantName;
-  final String deliveryTime;
-  final String status;
-  final List<String> foodList;
-  final List<double> quantity;
-  final String totalPayment;
-
-  HistoryEntry({
-    required this.restaurantName,
-    required this.deliveryTime,
-    required this.status,
-    required this.foodList,
-    required this.quantity,
-    required this.totalPayment,
-  });
-}
-
-// Contoh daftar riwayat
-List<HistoryEntry> historyList = [
-  HistoryEntry(
-    restaurantName: 'Restoran A',
-    deliveryTime: '2 Juni 2023, 13.00',
-    status: 'Selesai',
-    foodList: ['Nasi Goreng', 'Ayam Bakar'],
-    quantity: [2, 1],
-    totalPayment: 'Rp50.000',
-  ),
-  HistoryEntry(
-    restaurantName: 'Restoran B',
-    deliveryTime: '1 Juni 2023, 19.30',
-    status: 'Dalam Perjalanan',
-    foodList: ['Mie Ayam', 'Es Teh'],
-    quantity: [1, 1],
-    totalPayment: 'Rp35.000',
-  ),
-  HistoryEntry(
-    restaurantName: 'Restoran C',
-    deliveryTime: '31 Mei 2023, 12.15',
-    status: 'Dikonfirmasi',
-    foodList: ['Nasi Padang'],
-    quantity: [1],
-    totalPayment: 'Rp25.000',
-  ),
-];

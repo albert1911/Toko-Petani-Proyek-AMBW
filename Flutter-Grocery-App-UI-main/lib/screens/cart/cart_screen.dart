@@ -27,14 +27,16 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     super.initState();
 
-    if (cartItems.isNotEmpty) {
-      merchant = daftarToko[int.parse(cartItems[0].idMerchant)];
-      isCartEmpty = false;
-    } else {
-      isCartEmpty = true;
-    }
+    if (cartItems.isEmpty) {
+      loadCart();
 
-    loadCart();
+      if (cartItems.isNotEmpty) {
+        merchant = daftarToko[int.parse(cartItems[0].idMerchant)];
+        isCartEmpty = false;
+      } else {
+        isCartEmpty = true;
+      }
+    }
   }
 
   @override

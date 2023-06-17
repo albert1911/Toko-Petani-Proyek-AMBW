@@ -10,8 +10,6 @@ class Toko {
   });
 }
 
-// List temporary digunakan agar akses ke database tidak dilakukan berulang-ulang
-// saat melakukan debugging
 var daftarToko = [
   Toko(id: "1", nama: "Pasar Mekar", alamat: "Jl. Semar 234"),
   Toko(id: "2", nama: "Jaya Makmur", alamat: "Jl. Merdeka 123"),
