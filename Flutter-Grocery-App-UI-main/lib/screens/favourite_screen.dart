@@ -1,60 +1,128 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/screens/product_details/product_details_screen.dart';
 
 import '../models/grocery_item.dart';
 import '../widgets/grocery_item_card_widget.dart';
 
+class FavouriteScreen extends StatefulWidget {
+  @override
+  State<FavouriteScreen> createState() => _FavouriteScreenState();
+}
 
-class FavouriteScreen extends StatelessWidget {
+class _FavouriteScreenState extends State<FavouriteScreen> {
+  bool isFavoriteEmpty = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadFavoriteItems();
+  }
+
+  Future<void> loadFavoriteItems() async {
+    List<String> loadedFavoriteItems = await loadFavorite();
+    setState(() {
+      favoriteItems = loadedFavoriteItems;
+      if (favoriteItems.isNotEmpty) {
+        isFavoriteEmpty = false;
+      } else {
+        isFavoriteEmpty = true;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: AppText(
-          text: "No Favorite Items",
-          fontWeight: FontWeight.w600,
-          color: Color(0xFF7C7C7C),
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 25,
+              ),
+              Text(
+                "Produk Favorit",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              isFavoriteEmpty
+                  ? Container(
+                      child: Center(
+                        child: AppText(
+                          text: "No Favorite Items",
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF7C7C7C),
+                        ),
+                      ),
+                    )
+                  : itemsFavorite(context),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-  Widget getHorizontalItemSlider(List<GroceryItem> items) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      height: 300,
-      child: ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        itemCount: items.length,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
+
+  Widget itemsFavorite(BuildContext context) {
+    // Get product by name
+    final List<GroceryItem> itemKu = [];
+
+    for (String favoriteItem in favoriteItems) {
+      for (GroceryItem sayurItem in itemsSayur) {
+        if (sayurItem.name == favoriteItem) {
+          itemKu.add(sayurItem);
+          print('cek123 Found a matching item: ${sayurItem.name}');
+        }
+      }
+
+      for (GroceryItem buahItem in itemsBuah) {
+        if (buahItem.name == favoriteItem) {
+          itemKu.add(buahItem);
+          print('cek123 Found a matching item: ${buahItem.name}');
+        }
+      }
+    }
+
+    return SingleChildScrollView(
+      child: StaggeredGrid.count(
+        crossAxisCount: 2,
+        children: itemKu.asMap().entries.map<Widget>((e) {
+          GroceryItem groceryItem = e.value;
           return GestureDetector(
             onTap: () {
-              onItemClicked(context, items[index]);
+              onItemClicked(context, groceryItem);
             },
-            child: GroceryItemCardWidget(
-              item: items[index],
-              heroSuffix: "home_screen",
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: GroceryItemCardWidget(
+                item: groceryItem,
+                heroSuffix: "explore_screen",
+              ),
             ),
           );
-        },
-        separatorBuilder: (BuildContext context, int index) {
-          return SizedBox(
-            width: 20,
-          );
-        },
+        }).toList(),
+        mainAxisSpacing: 3.0,
+        crossAxisSpacing: 0.0,
       ),
     );
   }
+
   void onItemClicked(BuildContext context, GroceryItem groceryItem) {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ProductDetailsScreen(
-                groceryItem,
-                heroSuffix: "home_screen",
-              )),
+        builder: (context) => ProductDetailsScreen(
+          groceryItem,
+          heroSuffix: "explore_screen",
+        ),
+      ),
     );
   }
-  
 }

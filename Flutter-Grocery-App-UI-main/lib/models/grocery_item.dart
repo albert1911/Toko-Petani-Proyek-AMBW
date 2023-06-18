@@ -33,9 +33,6 @@ class Stock {
   });
 }
 
-
-
-
 var demoItems = [
   GroceryItem(
       id: 1,
@@ -73,27 +70,6 @@ var demoItems = [
       quantity: "-/buah",
       details: Stock(merchantIds: ["1", "3"], stockAmounts: ["3", "2"]),
       type: "sayur"),
-  // GroceryItem(
-  //   id: 4,
-  //   name: "Ginger",
-  //   description: "250gm, Priceg",
-  //   price: 4.99,
-  //   imagePath: "assets/images/grocery_images/ginger.png",
-  // ),
-  // GroceryItem(
-  //   id: 5,
-  //   name: "Meat",
-  //   description: "250gm, Priceg",
-  //   price: 4.99,
-  //   imagePath: "assets/images/grocery_images/beef.png",
-  // ),
-  // GroceryItem(
-  //   id: 6,
-  //   name: "Chikken",
-  //   description: "250gm, Priceg",
-  //   price: 4.99,
-  //   imagePath: "assets/images/grocery_images/chicken.png",
-  // ),
 ];
 
 var exclusiveOffers = [demoItems[0], demoItems[1]];
@@ -114,15 +90,24 @@ List<GroceryItem> filteredItems = [];
 
 List<String> favoriteItems = [];
 
-Future<void> saveListToSharedPreferences() async {
+Future<void> saveFavorite() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setStringList('favourite', favoriteItems);
-  print('List saved to SharedPreferences');
+  await prefs.setStringList('favorite', favoriteItems);
+
+  print(favoriteItems);
 }
 
-  Future<void> getListFromSharedPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();  
-   favoriteItems = prefs.getStringList('favourite')!;
-  
- 
+Future<List<String>> loadFavorite() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  try {
+    List<String>? loadedFavoriteItems = prefs.getStringList('favorite');
+    if (loadedFavoriteItems != null) {
+      return loadedFavoriteItems;
+    }
+  } catch (e) {
+    print("Error loading favorite: $e");
   }
+
+  return [];
+}

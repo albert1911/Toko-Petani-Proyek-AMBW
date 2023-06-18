@@ -26,17 +26,20 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
+    loadCartItems();
+  }
 
-    if (cartItems.isEmpty) {
-      loadCart();
-
+  Future<void> loadCartItems() async {
+    List<CartItem> loadedCartItems = await loadCart();
+    setState(() {
+      cartItems = loadedCartItems;
       if (cartItems.isNotEmpty) {
         merchant = daftarToko[int.parse(cartItems[0].idMerchant)];
         isCartEmpty = false;
       } else {
         isCartEmpty = true;
       }
-    }
+    });
   }
 
   @override
@@ -50,7 +53,7 @@ class _CartScreenState extends State<CartScreen> {
                 height: 25,
               ),
               Text(
-                "My Cart",
+                "Keranjang Belanja",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(

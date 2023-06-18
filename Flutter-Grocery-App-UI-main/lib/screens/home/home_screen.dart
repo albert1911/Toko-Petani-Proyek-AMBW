@@ -1,6 +1,6 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/models/grocery_item.dart';
 import 'package:grocery_app/screens/product_details/product_details_screen.dart';
@@ -24,12 +24,11 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isFiltered = false;
   String searchedKeyword = "";
   @override
-    void initState(){
-      super.initState();
-      getListFromSharedPreferences(); 
-      
-    }
-  
+  void initState() {
+    super.initState();
+    loadFavorite();
+  }
+
   @override
   Widget build(BuildContext context) {
     // FETCH DATA FROM PRODUCTS TABLE
@@ -249,7 +248,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                   SizedBox(
                                     height: 15,
                                   ),
-                                  getHorizontalItemSlider(filteredItems),
+                                  SingleChildScrollView(
+                                    child: StaggeredGrid.count(
+                                      crossAxisCount: 2,
+                                      children: filteredItems
+                                          .asMap()
+                                          .entries
+                                          .map<Widget>((e) {
+                                        GroceryItem groceryItem = e.value;
+                                        return GestureDetector(
+                                          onTap: () {
+                                            onItemClicked(context, groceryItem);
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.all(10),
+                                            child: GroceryItemCardWidget(
+                                              item: groceryItem,
+                                              heroSuffix: "explore_screen",
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      mainAxisSpacing: 3.0,
+                                      crossAxisSpacing: 0.0,
+                                    ),
+                                  ),
                                   SizedBox(
                                     height: 15,
                                   ),

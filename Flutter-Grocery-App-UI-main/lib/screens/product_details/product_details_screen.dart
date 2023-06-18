@@ -116,7 +116,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Spacer(),
                     AppButton(
                       label: "Masukkan ke Keranjang",
-                      onPressed: () {
+                      onPressed: () async {
                         double cartAmount = amount.toDouble();
                         switch (currentQuantity) {
                           case "-/250g":
@@ -137,7 +137,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           );
 
                           if (cartItems.isEmpty) {
-                            loadCart();
+                            cartItems = await loadCart();
                           }
 
                           saveCart();

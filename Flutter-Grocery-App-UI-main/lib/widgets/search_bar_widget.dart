@@ -73,10 +73,16 @@ class _SearchBarWidgetState extends State<SearchBarWidget> {
   void filterItems(String searchText) {
     setState(() {
       filteredItems = [];
-      filteredItems.addAll(itemsSayur.where((item) =>
-          item.name.toLowerCase().contains(searchText.toLowerCase())));
-      filteredItems.addAll(itemsBuah.where((item) =>
-          item.name.toLowerCase().contains(searchText.toLowerCase())));
+      var matchedItems = <GroceryItem>[];
+
+      matchedItems.addAll(itemsSayur.where((item) =>
+          item.name.toLowerCase().contains(searchText.toLowerCase()) ||
+          item.description.toLowerCase().contains(searchText.toLowerCase())));
+      matchedItems.addAll(itemsBuah.where((item) =>
+          item.name.toLowerCase().contains(searchText.toLowerCase()) ||
+          item.description.toLowerCase().contains(searchText.toLowerCase())));
+      filteredItems.addAll(matchedItems.toSet());
+
       widget.updateIsFiltered(filteredItems.isNotEmpty, searchText);
     });
   }
