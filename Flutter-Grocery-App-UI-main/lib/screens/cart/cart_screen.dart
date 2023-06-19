@@ -306,7 +306,8 @@ class _CartScreenState extends State<CartScreen> {
           idMerchant: int.parse(cartItems[checked].idMerchant),
           listBarang: listBarang,
           deliveryTime: Timestamp.fromDate(DateTime.now()),
-          totalPayment: totalPayment);
+          totalPayment: totalPayment,
+          status: "Dikonfirmasi");
 
       print(checkout.toString());
     });

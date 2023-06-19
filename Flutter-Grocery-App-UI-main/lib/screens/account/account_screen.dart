@@ -18,9 +18,13 @@ class AccountScreen extends StatefulWidget {
 
 class _AccountScreenState extends State<AccountScreen> {
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     loadUserData();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
         child: SingleChildScrollView(
@@ -33,13 +37,12 @@ class _AccountScreenState extends State<AccountScreen> {
                 leading:
                     SizedBox(width: 65, height: 65, child: getImageHeader()),
                 title: AppText(
-                  text: ReCase(userNameKu == "" ? "Username" : userNameKu)
-                      .titleCase,
+                  text: ReCase(!isLoggedIn ? "Username" : userNameKu).titleCase,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 subtitle: AppText(
-                  text: userEmailKu != "" ? userEmailKu : "Email",
+                  text: isLoggedIn ? userEmailKu : "Email",
                   color: Color(0xff7C7C7C),
                   fontWeight: FontWeight.normal,
                   fontSize: 16,
@@ -98,7 +101,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
             ),
             Text(
-              userEmailKu != "" ? "Keluar" : "Masuk",
+              isLoggedIn ? "Keluar" : "Masuk",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 18,
@@ -154,28 +157,38 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Widget getAccountItemWidget(AccountItem accountItem) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 15),
-      padding: EdgeInsets.symmetric(horizontal: 25),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 20,
-            height: 20,
-            child: SvgPicture.asset(
-              accountItem.iconPath,
+    return GestureDetector(
+      onTap: () {
+        if (accountItem.route != null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => accountItem.route!),
+          );
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 15),
+        padding: EdgeInsets.symmetric(horizontal: 25),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 20,
+              height: 20,
+              child: SvgPicture.asset(
+                accountItem.iconPath,
+              ),
             ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Text(
-            accountItem.label,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          Spacer(),
-          Icon(Icons.arrow_forward_ios)
-        ],
+            SizedBox(
+              width: 20,
+            ),
+            Text(
+              accountItem.label,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Spacer(),
+            Icon(Icons.arrow_forward_ios)
+          ],
+        ),
       ),
     );
   }
@@ -185,7 +198,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
     if (userEmailKu != "") {
       userNameKu = await getUserName(userEmailKu);
-      isLoggedIn = true;
+      setState(() {
+        isLoggedIn = true;
+      });
     }
   }
 }
