@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class HistoryEntry {
   final String emailUser;
   final int idMerchant;
-  final Map<String, List<int>> listBarang;
+  final Map<String, dynamic> listBarang;
   final Timestamp deliveryTime;
   final double totalPayment;
 
@@ -13,7 +13,14 @@ class HistoryEntry {
       required this.listBarang,
       required this.deliveryTime,
       required this.totalPayment});
+
+  @override
+  String toString() {
+    return 'HistoryEntry{emailUser: $emailUser, \nidMerchant: $idMerchant, \nlistBarang: $listBarang, \ndeliveryTime: $deliveryTime, \ntotalPayment: $totalPayment}';
+  }
 }
+
+var checkout;
 
 List<HistoryEntry> historyList = [
   HistoryEntry(
@@ -47,3 +54,16 @@ List<HistoryEntry> historyList = [
     totalPayment: 123.45,
   )
 ];
+
+void addHistoryEntryToFirebase(HistoryEntry entry) async {
+  CollectionReference history =
+      FirebaseFirestore.instance.collection('history');
+
+  await history.add({
+    'deliver-time': entry.deliveryTime,
+    'email-user': entry.emailUser,
+    'id-merchant': entry.idMerchant,
+    'list-barang': entry.listBarang,
+    'total-payment': entry.totalPayment,
+  });
+}

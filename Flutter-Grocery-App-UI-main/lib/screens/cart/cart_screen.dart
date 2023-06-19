@@ -1,14 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/models/cart_item.dart';
+import 'package:grocery_app/models/history_entry.dart';
 import 'package:grocery_app/models/merchant.dart';
 import 'package:grocery_app/widgets/chart_item_widget.dart';
 import 'package:collection/collection.dart';
 
+import '../../models/grocery_item.dart';
 import '../../models/user.dart';
 import '../../widgets/_confirmation_dialog.dart';
 import '../dashboard/dashboard_screen.dart';
+import '../order_accepted_screen.dart';
 import '../order_failed_dialog.dart';
 import 'checkout_bottom_sheet.dart';
 
@@ -77,7 +81,12 @@ class _CartScreenState extends State<CartScreen> {
         label: "Lakukan Check Out",
         fontWeight: FontWeight.w600,
         padding: EdgeInsets.symmetric(vertical: 30),
-        onPressed: () {
+        onPressed: () async {
+          if (userEmailKu == "") {
+            userEmailKu = await loadUser();
+            if (userEmailKu != "") isLoggedIn = true;
+          }
+
           if (isLoggedIn) {
             showBottomSheet(context);
           } else {
@@ -195,6 +204,7 @@ class _CartScreenState extends State<CartScreen> {
                   } else {
                     totalPriceList[cartIndex] = totalPrice;
                   }
+
                   return Column(
                     children: [
                       Row(
@@ -272,6 +282,45 @@ class _CartScreenState extends State<CartScreen> {
           );
   }
 
+  void makeHistoryEntry() async {
+    Map<String, dynamic> listBarang = {};
+    listBarang["id-barang"] = cartItems[checked].idProducts;
+    listBarang["jumlah-barang"] = cartItems[checked].quantity;
+
+    double totalPayment = 0.0;
+
+    for (int i = 0; i < listBarang["id-barang"]!.length; i++) {
+      String itemId = listBarang["id-barang"]![i];
+      double quantity = listBarang["jumlah-barang"]![i];
+
+      GroceryItem groceryItem = getGroceryItemById(itemId);
+
+      if (groceryItem != unknownProduct) {
+        totalPayment += groceryItem.price * quantity;
+      }
+    }
+
+    setState(() {
+      checkout = HistoryEntry(
+          emailUser: userEmailKu,
+          idMerchant: int.parse(cartItems[checked].idMerchant),
+          listBarang: listBarang,
+          deliveryTime: Timestamp.fromDate(DateTime.now()),
+          totalPayment: totalPayment);
+
+      print(checkout.toString());
+    });
+
+    addHistoryEntryToFirebase(checkout);
+
+    Navigator.pop(context);
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return OrderAcceptedScreen();
+        });
+  }
+
   void showBottomSheet(context) {
     totalCost = totalPriceList[checked];
 
@@ -280,7 +329,7 @@ class _CartScreenState extends State<CartScreen> {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         builder: (BuildContext bc) {
-          return CheckoutBottomSheet();
+          return CheckoutBottomSheet(checkoutFunction: makeHistoryEntry);
         });
   }
 

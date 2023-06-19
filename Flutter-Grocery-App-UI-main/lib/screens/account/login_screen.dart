@@ -3,12 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:grocery_app/models/user.dart';
 import 'package:grocery_app/screens/account/register_screen.dart';
 import 'package:grocery_app/screens/dashboard/dashboard_screen.dart';
-import 'package:provider/provider.dart';
 
 import '../../common_widgets/_app_text_field.dart';
 import '../../widgets/_custom_button.dart';
 import '../../widgets/_custom_container.dart';
-import '_user_provider.dart';
 
 class Login extends StatefulWidget {
   final bool? isError;
@@ -84,9 +82,9 @@ class _LoginState extends State<Login> {
       final user = userCredential.user;
 
       if (user != null) {
-        final userProvider = Provider.of<UserProvider>(context, listen: false);
-        userProvider.setUserEmail(user.email);
-        userProvider.setUserName();
+        setUserEmail(user.email);
+        userNameKu = await getUserName(userEmailKu);
+        saveUser();
 
         setState(() {
           errorMessage = '';

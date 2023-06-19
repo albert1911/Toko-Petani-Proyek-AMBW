@@ -39,8 +39,6 @@ Future<void> saveCart() async {
       cartItems.map((item) => item.toJson()).toList();
   String cartItemsString = jsonEncode(cartItemsJson);
   await prefs.setString("cart", cartItemsString);
-
-  print('Data saved successfully.');
 }
 
 Future<List<CartItem>> loadCart() async {

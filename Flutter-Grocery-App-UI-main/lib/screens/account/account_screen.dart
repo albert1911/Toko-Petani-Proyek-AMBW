@@ -6,19 +6,20 @@ import 'package:grocery_app/common_widgets/app_text.dart';
 import 'package:grocery_app/helpers/column_with_seprator.dart';
 import 'package:grocery_app/screens/account/login_screen.dart';
 import 'package:grocery_app/styles/colors.dart';
-import 'package:provider/provider.dart';
 import 'package:recase/recase.dart';
 
 import '../../models/user.dart';
-import '_user_provider.dart';
 import 'account_item.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    final userEmail = userProvider.userEmail;
-    final userName = userProvider.userName;
+    loadUserData();
 
     return SafeArea(
       child: Container(
@@ -32,14 +33,13 @@ class AccountScreen extends StatelessWidget {
                 leading:
                     SizedBox(width: 65, height: 65, child: getImageHeader()),
                 title: AppText(
-                  text: ReCase(userName ?? 'Username').titleCase,
+                  text: ReCase(userNameKu == "" ? "Username" : userNameKu)
+                      .titleCase,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 subtitle: AppText(
-                  text: userProvider.userEmail != null
-                      ? userEmail.toString()
-                      : "Email",
+                  text: userEmailKu != "" ? userEmailKu : "Email",
                   color: Color(0xff7C7C7C),
                   fontWeight: FontWeight.normal,
                   fontSize: 16,
@@ -58,7 +58,7 @@ class AccountScreen extends StatelessWidget {
               SizedBox(
                 height: 20,
               ),
-              logoutButton(context, userEmail.toString(), userProvider),
+              logoutButton(context, userEmailKu),
               SizedBox(
                 height: 20,
               ),
@@ -69,8 +69,7 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  Widget logoutButton(
-      BuildContext context, String userEmail, UserProvider userProvider) {
+  Widget logoutButton(BuildContext context, String userEmail) {
     return Container(
       width: double.maxFinite,
       margin: EdgeInsets.symmetric(horizontal: 25),
@@ -99,7 +98,7 @@ class AccountScreen extends StatelessWidget {
               ),
             ),
             Text(
-              userProvider.userEmail != null ? "Keluar" : "Masuk",
+              userEmailKu != "" ? "Keluar" : "Masuk",
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 18,
@@ -110,16 +109,32 @@ class AccountScreen extends StatelessWidget {
           ],
         ),
         onPressed: () async {
-          if (userProvider.userEmail != null) {
-            userProvider.setUserEmail(null);
-            userProvider.setUserName();
-            isLoggedIn = false;
+          if (userEmailKu != "") {
+            setUserEmail("");
+            saveUser();
+            userNameKu = await getUserName(userEmailKu);
 
             try {
               await FirebaseAuth.instance.signOut();
             } catch (e) {
               print('Error signing out: $e');
             }
+
+            setState(() {
+              isLoggedIn = false;
+            });
+
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                'Berhasil Keluar!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Color(0xFF2A881E),
+                  fontSize: 20.0,
+                ),
+              ),
+              backgroundColor: Color(0xFFFEFFB5),
+            ));
           } else {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Login()));
@@ -163,5 +178,14 @@ class AccountScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void loadUserData() async {
+    userEmailKu = await loadUser();
+
+    if (userEmailKu != "") {
+      userNameKu = await getUserName(userEmailKu);
+      isLoggedIn = true;
+    }
   }
 }
