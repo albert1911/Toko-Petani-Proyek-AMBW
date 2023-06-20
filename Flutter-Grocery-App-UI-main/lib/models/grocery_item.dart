@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class GroceryItem {
@@ -25,7 +26,7 @@ class GroceryItem {
 
 class Stock {
   final List<String> merchantIds;
-  final List<String> stockAmounts;
+  final List<dynamic> stockAmounts;
 
   Stock({
     required this.merchantIds,
@@ -41,7 +42,7 @@ var demoItems = [
       price: 4.99,
       imagePath: "assets/images/grocery_images/banana.png",
       quantity: "-/sisir",
-      details: Stock(merchantIds: ["1", "2"], stockAmounts: ["5", "5"]),
+      details: Stock(merchantIds: ["1", "2"], stockAmounts: [5, 5]),
       type: "buah"),
   GroceryItem(
       id: 2,
@@ -50,7 +51,7 @@ var demoItems = [
       price: 4.99,
       imagePath: "assets/images/grocery_images/apple.png",
       quantity: "-/1kg",
-      details: Stock(merchantIds: ["2", "3"], stockAmounts: ["4", "7"]),
+      details: Stock(merchantIds: ["2", "3"], stockAmounts: [4, 7]),
       type: "buah"),
   GroceryItem(
       id: 3,
@@ -59,7 +60,7 @@ var demoItems = [
       price: 4.99,
       imagePath: "assets/images/grocery_images/pepper.png",
       quantity: "-/1kg",
-      details: Stock(merchantIds: ["1", "3"], stockAmounts: ["3", "2"]),
+      details: Stock(merchantIds: ["1", "3"], stockAmounts: [3, 2]),
       type: "sayur"),
   GroceryItem(
       id: 4,
@@ -68,7 +69,7 @@ var demoItems = [
       price: 4.99,
       imagePath: "assets/images/grocery_images/beef.png",
       quantity: "-/buah",
-      details: Stock(merchantIds: ["1", "3"], stockAmounts: ["3", "2"]),
+      details: Stock(merchantIds: ["1", "3"], stockAmounts: [3, 2]),
       type: "sayur"),
 ];
 
@@ -89,6 +90,26 @@ final List<GroceryItem> itemsBuah = [];
 List<GroceryItem> filteredItems = [];
 
 List<String> favoriteItems = [];
+
+void updateFirebaseStock(
+    String itemId, String merchantId, double quantityAmount) async {
+  CollectionReference products =
+      FirebaseFirestore.instance.collection('products');
+
+  DocumentSnapshot doc = await products.doc(itemId).get();
+  Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  Map<String, dynamic> stock = data['stock'];
+  List<dynamic> idMerchantList = stock['id-merchant'];
+  List<dynamic> stockAmountList = stock['stock-amount'];
+
+  int index = idMerchantList.indexOf(merchantId);
+  if (index != -1) {
+    stockAmountList[index] -= quantityAmount;
+    await products.doc(itemId).update({
+      'stock.stock-amount': stockAmountList,
+    });
+  }
+}
 
 Future<void> saveFavorite() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
 import 'package:grocery_app/common_widgets/app_text.dart';
+import 'package:grocery_app/models/user.dart';
 
 import '../../models/cart_item.dart';
 import '../../widgets/_confirmation_dialog.dart';
@@ -15,6 +16,24 @@ class CheckoutBottomSheet extends StatefulWidget {
 }
 
 class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  void loadUserData() async {
+    userEmailKu = await loadUser();
+
+    if (userEmailKu != "") {
+      userNameKu = await getUserName(userEmailKu, "nama");
+      userAddressKu = await getUserName(userEmailKu, "alamat");
+      setState(() {
+        isLoggedIn = true;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,6 +67,8 @@ class _CheckoutBottomSheetState extends State<CheckoutBottomSheet> {
           SizedBox(
             height: 45,
           ),
+          getDivider(),
+          checkoutRow("Alamat Tujuan", trailingText: userAddressKu),
           getDivider(),
           checkoutRow(
             "Pembayaran",

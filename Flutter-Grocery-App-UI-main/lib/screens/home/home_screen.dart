@@ -59,16 +59,20 @@ class _HomeScreenState extends State<HomeScreen> {
               List<String>.from(data!['stock']['id-merchant'])
                   .map((id) => getLocationName(id))
                   .join(',\n');
+          List<dynamic> stockAmountList =
+              List<dynamic>.from(data['stock']['stock-amount']);
+          stockAmountList.removeWhere((element) => element == 0);
 
           // Create a GroceryItem object using the fetched data
+
           final GroceryItem item = GroceryItem(
             id: int.parse(document.id),
             name: data['name'],
             price: double.parse(data['price'].toString()),
             description: data['quantity'] +
                 ", Total stok: " +
-                List<String>.from(data['stock']['stock-amount'])
-                    .map((string) => int.parse(string))
+                List<dynamic>.from(data['stock']['stock-amount'])
+                    .map((string) => string)
                     .toList()
                     .reduce((value, element) => value + element)
                     .toString() +
@@ -77,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
             imagePath: "assets/images/barang_jualan/" + data['name'] + ".jpg",
             details: Stock(
               merchantIds: List<String>.from(data['stock']['id-merchant']),
-              stockAmounts: List<String>.from(data['stock']['stock-amount']),
+              stockAmounts: stockAmountList,
             ),
             type: data['type'],
           );

@@ -115,7 +115,8 @@ class _AccountScreenState extends State<AccountScreen> {
           if (userEmailKu != "") {
             setUserEmail("");
             saveUser();
-            userNameKu = await getUserName(userEmailKu);
+            userNameKu = await getUserName(userEmailKu, "nama");
+            userAddressKu = await getUserName(userEmailKu, "alamat");
 
             try {
               await FirebaseAuth.instance.signOut();
@@ -197,7 +198,8 @@ class _AccountScreenState extends State<AccountScreen> {
     userEmailKu = await loadUser();
 
     if (userEmailKu != "") {
-      userNameKu = await getUserName(userEmailKu);
+      userNameKu = await getUserName(userEmailKu, "nama");
+      userAddressKu = await getUserName(userEmailKu, "alamat");
       setState(() {
         isLoggedIn = true;
       });

@@ -245,7 +245,7 @@ class _CartScreenState extends State<CartScreen> {
                                       newQuantity, cartIndex, index);
                                 },
                                 onDeleteItem: () {
-                                  deleteCartItem(index.toString());
+                                  deleteCartItem(cartIndex, index);
                                 },
                               ),
                             );
@@ -307,7 +307,17 @@ class _CartScreenState extends State<CartScreen> {
           listBarang: listBarang,
           deliveryTime: Timestamp.fromDate(DateTime.now()),
           totalPayment: totalPayment,
-          status: "Dikonfirmasi");
+          status: "Dikonfirmasi",
+          historyAddress: userAddressKu);
+
+      for (var i = 0; i < listBarang["id-barang"].length; i++) {
+        updateFirebaseStock(listBarang["id-barang"][i],
+            cartItems[checked].idMerchant, listBarang["jumlah-barang"][i]);
+      }
+
+      cartItems.removeAt(checked);
+      saveCart();
+      isCartEmpty = true;
 
       print(checkout.toString());
     });
@@ -341,9 +351,9 @@ class _CartScreenState extends State<CartScreen> {
     });
   }
 
-  void deleteCartItem(String itemIndex) {
+  void deleteCartItem(int cartIndex, int itemIndex) {
     setState(() {
-      cartItems.removeAt(int.parse(itemIndex));
+      cartItems[cartIndex].idProducts.removeAt(itemIndex);
 
       if (cartItems.isEmpty) {
         isCartEmpty = true;

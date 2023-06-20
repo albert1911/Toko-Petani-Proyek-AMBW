@@ -83,7 +83,8 @@ class _LoginState extends State<Login> {
 
       if (user != null) {
         setUserEmail(user.email);
-        userNameKu = await getUserName(userEmailKu);
+        userNameKu = await getUserName(userEmailKu, "nama");
+        userAddressKu = await getUserName(userEmailKu, "alamat");
         saveUser();
 
         setState(() {

@@ -5,7 +5,7 @@ import '../../models/merchant.dart';
 class EditDataDialog extends StatefulWidget {
   final String currentLocation;
   final List<String> locationOptions;
-  final List<String> stockAmounts;
+  final List<dynamic> stockAmounts;
   final Function(String) onLocationSelected;
   final String editType;
 

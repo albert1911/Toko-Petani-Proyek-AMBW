@@ -24,3 +24,12 @@ String getLocationName(String locationId) {
 
   return selectedToko.nama;
 }
+
+String getLocationAddress(String locationId) {
+  Toko? selectedToko = daftarToko.firstWhere(
+    (toko) => toko.id == locationId,
+    orElse: () => Toko(id: "0", nama: "Unknown", alamat: ""),
+  );
+
+  return selectedToko.alamat;
+}

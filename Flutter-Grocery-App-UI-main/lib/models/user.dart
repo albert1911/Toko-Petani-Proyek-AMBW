@@ -28,13 +28,14 @@ class MyUser {
 bool isLoggedIn = false;
 String userNameKu = "";
 String userEmailKu = "";
+String userAddressKu = "";
 
 void setUserEmail(String? email) {
   userEmailKu = email!;
 }
 
-Future<String> getUserName(String userEmail) async {
-  String userName = '';
+Future<String> getUserName(String userEmail, String getWhat) async {
+  String userRes = '';
 
   try {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -44,13 +45,17 @@ Future<String> getUserName(String userEmail) async {
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      userName = querySnapshot.docs.first.get('nama') ?? '';
+      if (getWhat == "nama") {
+        userRes = querySnapshot.docs.first.get('nama') ?? '';
+      } else {
+        userRes = querySnapshot.docs.first.get('alamat') ?? '';
+      }
     }
   } catch (e) {
     print('Error retrieving user name: $e');
   }
 
-  return userName;
+  return userRes;
 }
 
 Future<String> loadUser() async {

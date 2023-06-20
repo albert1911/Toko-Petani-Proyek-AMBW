@@ -54,9 +54,10 @@ class OrderAcceptedScreen extends StatelessWidget {
             InkWell(
               onTap: () {
                 Navigator.pop(context);
+                Navigator.pop(context);
               },
               child: Text(
-                "Kembali ke Halaman Utama",
+                "Kembali",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
