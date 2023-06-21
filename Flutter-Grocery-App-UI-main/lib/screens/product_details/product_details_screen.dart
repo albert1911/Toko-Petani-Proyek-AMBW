@@ -434,7 +434,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       }
     }
 
-    double availableStock = 0;
+    dynamic availableStock = 0;
     for (int x = 0; x < widget.groceryItem.details!.merchantIds.length; x++) {
       if (idMerchantCart == widget.groceryItem.details!.merchantIds[x]) {
         availableStock = widget.groceryItem.details!.stockAmounts[x];

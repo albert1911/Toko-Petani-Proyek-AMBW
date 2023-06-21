@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:grocery_app/common_widgets/app_button.dart';
+import 'package:grocery_app/screens/account/_history_screen.dart';
 
 class OrderAcceptedScreen extends StatelessWidget {
   @override
@@ -46,6 +47,8 @@ class OrderAcceptedScreen extends StatelessWidget {
               label: "Lihat Riwayat Pesanan",
               onPressed: () {
                 Navigator.pop(context);
+                Navigator.pop(context);
+                HistoryScreen();
               },
             ),
             Spacer(
