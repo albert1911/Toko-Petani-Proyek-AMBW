@@ -9,14 +9,14 @@ E-PASAR: Buah & Sayur
 ## Screenshots  
 
 <p float="left">
-  <img src="Flutter-Grocery-App-UI-main/screenshots/1.jpg" width="200" />
-  <img src="Flutter-Grocery-App-UI-main/screenshots/2.jpg" width="200" /> 
-  <img src="Flutter-Grocery-App-UI-main/screenshots/3.jpg" width="200" />
-  <img src="Flutter-Grocery-App-UI-main/screenshots/4.jpg" width="200" />
-  <img src="Flutter-Grocery-App-UI-main/screenshots/5.jpg" width="200" /> 
-  <img src="Flutter-Grocery-App-UI-main/screenshots/6.jpg" width="200" />
-  <img src="Flutter-Grocery-App-UI-main/screenshots/7.jpg" width="200" />
-  <img src="Flutter-Grocery-App-UI-main/screenshots/8.jpg" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/1.png" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/2.png" width="200" /> 
+  <img src="Flutter-Grocery-App-UI-main/screenshots/3.png" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/4.png" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/5.png" width="200" /> 
+  <img src="Flutter-Grocery-App-UI-main/screenshots/6.png" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/7.png" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/8.png" width="200" />
 </p>
 
 -------------
