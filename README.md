@@ -2,7 +2,7 @@ E-PASAR: Buah & Sayur
 -------------
 
 ### Untuk mencoba prototype aplikasi yang sudah jadi, dapat mendownload apk pada [Tab Perilisan](https://github.com/albert1911/ambw_flutter/tree/main/apk/release)
-## Sebelum menginstal APK pastikan pilih versi APK yang sesuai dengan arsitektur ponsel anda.
+#### Sebelum menginstal APK pastikan pilih versi APK yang sesuai dengan arsitektur ponsel anda.
 
 -------------
 
