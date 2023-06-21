@@ -1,27 +1,22 @@
 E-PASAR: Buah & Sayur
-
 -------------
 
-### Untuk mencoba prototype aplikasi yang sudah jadi, dapat mendownload apk pada [Release Tab]()
-
--------------
-
-#### Design Credit : By  [Afsar Hossen](https://www.linkedin.com/in/afsar-shuvo/)  
-#### Design Files on Figma : [Online Groceries App UI](https://www.figma.com/community/file/882645007956337261)  
+### Untuk mencoba prototype aplikasi yang sudah jadi, dapat mendownload apk pada [Tab Perilisan](https://github.com/albert1911/ambw_flutter/tree/main/apk/release)
+## Sebelum menginstal APK pastikan pilih versi APK yang sesuai dengan arsitektur ponsel anda.
 
 -------------
 
 ## Screenshots  
 
 <p float="left">
-  <img src="screenshots/1.jpg" width="200" />
-  <img src="screenshots/2.jpg" width="200" /> 
-  <img src="screenshots/3.jpg" width="200" />
-  <img src="screenshots/4.jpg" width="200" />
-  <img src="screenshots/5.jpg" width="200" /> 
-  <img src="screenshots/6.jpg" width="200" />
-  <img src="screenshots/7.jpg" width="200" />
-  <img src="screenshots/8.jpg" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/1.jpg" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/2.jpg" width="200" /> 
+  <img src="Flutter-Grocery-App-UI-main/screenshots/3.jpg" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/4.jpg" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/5.jpg" width="200" /> 
+  <img src="Flutter-Grocery-App-UI-main/screenshots/6.jpg" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/7.jpg" width="200" />
+  <img src="Flutter-Grocery-App-UI-main/screenshots/8.jpg" width="200" />
 </p>
 
 -------------
@@ -36,4 +31,8 @@ E-PASAR: Buah & Sayur
 -------------
 
 ## Server & Database
-Struktur database yang digunakan pada aplikasi ini dapat dilihat pada [Database Tab]()
+Struktur database yang digunakan pada aplikasi ini dapat dilihat pada [Tab Database](https://github.com/albert1911/ambw_flutter/tree/main/database_structure)
+
+-------------
+
+#### Template Awal : [Flutter Grocery App UI](https://github.com/mohammedhashim44/Flutter-Grocery-App-UI#readme)
